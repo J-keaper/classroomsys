@@ -12,13 +12,23 @@ module.exports = {
 
     module:{
         rules: [{
-            test: /\.js$/,
+            test: /\.js[x]?$/,
             use:['babel-loader?cacheDirectory=true'],
             include:path.join(__dirname,'./src/')
-        }]
+        },{
+            test: /\.css$/,
+            use: [
+                {
+                    loader: "style-loader"
+                }, {
+                    loader: "css-loader"
+                },
+            ]
+        },]
     },
 
     devServer: {
         contentBase: path.join(__dirname, './dist'),
+        historyApiFallback:true
     },
 };
