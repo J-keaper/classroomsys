@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import {Button} from 'antd';
 
 ReactDom.render(
-    <div>Hello React!</div>,
-    document.getElementById('app')
+    <Button>按钮</Button>
+    ,document.getElementById('root')
 );

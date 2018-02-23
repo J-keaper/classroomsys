@@ -4,5 +4,10 @@
     "react",
     "stage-0"
   ],
-  "plugins": []
+  "plugins": [[
+    "import", {
+      "libraryName": "antd",
+      "style": "css"
+    }]
+  ]
 }
