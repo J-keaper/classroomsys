@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {Button} from 'antd';
+import {BrowserRouter, Route} from 'react-router-dom';
+import App from "./App";
 
 ReactDom.render(
-    <Button>按钮</Button>
-    ,document.getElementById('root')
+    <BrowserRouter>
+        <Route path="/" component={App}/>
+    </BrowserRouter>
+    ,document.getElementById("root")
 );

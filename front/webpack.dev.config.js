@@ -16,13 +16,15 @@ module.exports = {
             use:['babel-loader?cacheDirectory=true'],
             include:path.join(__dirname,'./src/')
         },{
-            test: /\.css$/,
+            test: /\.(css|less)$/,
             use: [
                 {
                     loader: "style-loader"
                 }, {
                     loader: "css-loader"
-                },
+                },{
+                    loader: "less-loader"
+                }
             ]
         },]
     },
