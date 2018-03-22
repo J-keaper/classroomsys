@@ -1,13 +1,13 @@
 import React from 'react';
 import {Layout} from 'antd';
-import SideBar from "./components/SideBar";
-import HeadBar from "./components/HeadBar";
-import Footer from "./components/Footer";
-import ContentRouter from './routers';
+import SideBar from "./SideBar";
+import HeadBar from "./HeadBar";
+import Footer from "./Footer";
+import {AdminRouter as ContentRouter} from '../../routers';
+import {menus} from "../../constants/menus";
 
 const {Content} = Layout;
 class App extends React.Component {
-
     constructor(){
         super();
         this.state = {
