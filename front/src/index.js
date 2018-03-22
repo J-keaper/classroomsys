@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import {BrowserRouter, Route} from 'react-router-dom';
-import App from "./App";
+import AdminApp from "./containers/back";
+import FrontApp from "./containers/front";
+import {Switch} from "react-router";
 
 ReactDom.render(
     <BrowserRouter>
-        <Route path="/" component={App}/>
+        <Switch>
+            <Route path="/admin" component={AdminApp}/>
+            <Route path="/" component={FrontApp}/>
+        </Switch>
     </BrowserRouter>
     ,document.getElementById("root")
 );
