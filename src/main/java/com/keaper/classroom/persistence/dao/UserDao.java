@@ -1,4 +1,4 @@
-package com.keaper.persistence.dao;
+package com.keaper.classroom.persistence.dao;
 
 
 import org.springframework.stereotype.Repository;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserDao {
 
-    String selectUserNameById(int id);
+
+
 
 }
