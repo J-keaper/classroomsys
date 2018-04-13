@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.keaper.classroom.persistence.dao.ClassroomDao">
+    <resultMap id="classroomMap" type="com.keaper.classroom.modal.Classroom">
+        <id column="id" property="id"/>
+        <result column="number" property="number"/>
+        <result column="building" property="building"/>
+        <result column="campus" property="campus"/>
+        <result column="seating" property="seating"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <select id="selectClassroomByNumber" resultMap="classroomMap">
+        SELECT
+          id,
+          number,
+          building,
+          campus,
+          seating,
+          status
+        FROM
+          classroom
+        WHERE
+          number = #{number}
+    </select>
+
+
+    <select id="getClassroomList"  resultMap="classroomMap">
+        SELECT
+          id,
+          number,
+          building,
+          campus,
+          seating,
+          status
+        FROM
+          classroom
+        <where>
+          <if test="building != null">
+              building = #{building}
+          </if>
+          <if test="campus != null">
+              AND campus = #{campus}
+          </if>
+          <if test="status != null">
+              AND status = #{status}
+          </if>
+          <if test="number != null">
+              AND number LIKE CONCAT(CONCAT('%', #{number}), '%')
+          </if>
+        </where>
+        limit #{limit}
+        offset #{offset}
+    </select>
+
+
+</mapper>

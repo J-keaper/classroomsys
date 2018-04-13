@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+
+    <appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="Encoding" value="UTF-8"/>
+        <param name="File" value="/home/work/log/bonus-admin/bonus-admin.log"/>
+        <param name="DatePattern" value=".yyyyMMdd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%-5p %d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %l [%m]%n"/>
+        </layout>
+    </appender>
+    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%-5p %d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %l [%m]%n"/>
+        </layout>
+    </appender>
+
+    <logger name="com.keaper.classroom" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="stdout"/>
+    </logger>
+
+    <logger name="org.springframework.web" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="stdout"/>
+    </logger>
+
+
+</log4j:configuration>

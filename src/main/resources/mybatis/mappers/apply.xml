@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.keaper.classroom.persistence.dao.ApplyDao">
+    <resultMap id="applyMap" type="com.keaper.classroom.modal.Apply">
+        <id column="id" property="id"/>
+        <result column="applicant_id" property="applicantId"/>
+        <result column="apply_purpose" property="applyPurpose"/>
+        <result column="apply_reason" property="applyReason"/>
+        <result column="capacity" property="capacity"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="status" property="status"/>
+        <result column="auditor_id" property="auditorId"/>
+        <result column="audit_time" property="auditTime"/>
+        <result column="audit_result" property="auditResult"/>
+        <result column="classroom" property="classroom"/>
+    </resultMap>
+
+
+    <select id="getApplyList" resultMap="applyMap">
+        SELECT
+          id,
+          applicant_id,
+          apply_purpose,
+          apply_reason,
+          capacity,
+          start_time,
+          end_time,
+          create_time,
+          status,
+          auditor_id,
+          audit_time,
+          audit_result,
+          classroom
+        FROM
+          apply
+        <where>
+            <if test="applicant != null">
+                applicant = #{applicant}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        limit #{limit}
+        offset #{offset}
+    </select>
+
+    <select id="getApplyById" resultMap="applyMap">
+        SELECT
+          id,
+          applicant_id,
+          apply_purpose,
+          apply_reason,
+          capacity,
+          start_time,
+          end_time,
+          create_time,
+          status,
+          auditor_id,
+          audit_time,
+          audit_result,
+          classroom
+        FROM
+          apply
+        WHERE
+          id = #{id}
+    </select>
+
+
+    <insert id="addApply">
+        INSERT INTO
+          apply
+        (
+          applicant_id,
+          apply_purpose,
+          apply_reason,
+          capacity,
+          start_time,
+          end_time,
+          status,
+          create_time
+        )VALUES(
+          #{applicantId},
+          #{applyPurpose},
+          #{applyReason},
+          #{capacity},
+          #{startTime},
+          #{endTime},
+          #{status},
+          NOW()
+        )
+    </insert>
+
+    <update id="updateAuditInfo">
+        UPDATE
+          apply
+        <set>
+          auditor_id = #{auditorId},
+          status = #{status},
+          audit_result = #{result},
+            <if test="classroom != null">
+              classroom = #{classroom},
+            </if>
+          audit_time = NOW()
+        </set>
+        WHERE
+          id = #{id}
+    </update>
+
+</mapper>

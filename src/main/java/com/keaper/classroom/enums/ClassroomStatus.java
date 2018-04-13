@@ -1,5 +1,8 @@
 package com.keaper.classroom.enums;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ClassroomStatus {
     CLOSE(1,"关闭"),
     FREE(2,"空闲"),
@@ -12,6 +15,15 @@ public enum ClassroomStatus {
     ClassroomStatus(int code, String desc) {
         this.code = code;
         this.desc = desc;
+    }
+
+    public static ClassroomStatus codeOf(int code){
+        for(ClassroomStatus classroomStatus : ClassroomStatus.values()){
+            if(classroomStatus.getCode() == code){
+                return classroomStatus;
+            }
+        }
+        return null;
     }
 
     public int getCode() {

@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+
     <!--指定spring监听器-->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -27,6 +28,15 @@
         <servlet-name>springMvc</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>/WEB-INF/classes/log4j.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
 
     <listener>
         <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>

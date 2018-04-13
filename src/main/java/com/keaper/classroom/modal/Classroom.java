@@ -1,5 +1,7 @@
 package com.keaper.classroom.modal;
 
+import com.keaper.classroom.enums.ClassroomStatus;
+
 public class Classroom {
 
     private long id;
@@ -10,7 +12,9 @@ public class Classroom {
 
     private String campus;
 
-    private int status;
+    private int seating;
+
+    private ClassroomStatus status;
 
     public long getId() {
         return id;
@@ -44,11 +48,19 @@ public class Classroom {
         this.campus = campus;
     }
 
-    public int getStatus() {
+    public int getSeating() {
+        return seating;
+    }
+
+    public void setSeating(int seating) {
+        this.seating = seating;
+    }
+
+    public ClassroomStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(ClassroomStatus status) {
         this.status = status;
     }
 }

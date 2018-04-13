@@ -1,11 +1,17 @@
 import React from 'react';
 import {Icon, Layout, Menu} from 'antd';
+import {withRouter} from "react-router-dom";
 
 const {Header} = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
 class HeadBar extends React.Component{
+
+    handleLogout = () => {
+        this.props.history.push("/login");
+    };
+
     render(){
         return (
             <Header style={{background:"#fff",padding:0,paddingLeft:20,}}>
@@ -21,7 +27,7 @@ class HeadBar extends React.Component{
                             <span>Keaper</span>
                         </div>}>
                         <MenuItemGroup title="用户中心">
-                            <Menu.Item key="logout"><span >退出登录</span></Menu.Item>
+                            <Menu.Item key="logout"><span onClick={this.handleLogout}>退出登录</span></Menu.Item>
                         </MenuItemGroup>
                     </SubMenu>
                 </Menu>
@@ -30,4 +36,4 @@ class HeadBar extends React.Component{
     }
 }
 
-export default HeadBar;
+export default withRouter(HeadBar);

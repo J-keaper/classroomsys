@@ -1,5 +1,9 @@
 package com.keaper.classroom.enums;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum UserType {
     ADMIN(1,"管理员"),
     AUDITOR(2,"审核人员"),
@@ -13,6 +17,15 @@ public enum UserType {
     UserType(int code, String desc) {
         this.code = code;
         this.desc = desc;
+    }
+
+    public static  UserType codeOf(int code){
+        for(UserType userType : UserType.values()){
+            if(userType.getCode() == code){
+                return userType;
+            }
+        }
+        return null;
     }
 
     public int getCode() {

@@ -8,6 +8,14 @@ const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
 class HeadBar extends React.Component{
+    constructor(){
+        super();
+        this.state={
+            logined:false,
+        }
+    }
+
+
     render(){
         return (
             <Header className="header-container">
@@ -19,15 +27,20 @@ class HeadBar extends React.Component{
                     <Menu.Item key="2">
                         <Link to="/classroom">教室查询</Link>
                     </Menu.Item>
-                    <Menu.Item key="3" style={{float:"right"}}>登录</Menu.Item>
-                    <SubMenu style={{float:"right"}} title={
-                        <div>
-                            <Icon type="user" />
-                            <span>Keaper</span>
-                        </div>}>
-                        <Menu.Item key="user-center"><span >用户中心</span></Menu.Item>
-                        <Menu.Item key="logout"><span >退出登录</span></Menu.Item>
-                    </SubMenu>
+                    {this.state.logined ? (
+                        <SubMenu style={{float:"right"}} title={
+                            <div>
+                                <Icon type="user" />
+                                <span>Keaper</span>
+                            </div>}>
+                            <Menu.Item key="user-center"><span >用户中心</span></Menu.Item>
+                            <Menu.Item key="logout"><span >退出登录</span></Menu.Item>
+                        </SubMenu>
+                    ) : (
+                        <Menu.Item key="3" style={{float:"right"}}>
+                            <Link to={"/login"}>登录</Link>
+                        </Menu.Item>
+                    )}
                 </Menu>
             </Header>
         );
