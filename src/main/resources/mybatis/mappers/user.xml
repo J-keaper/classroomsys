@@ -3,15 +3,96 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.keaper.classroom.persistence.dao.UserDao">
 
-    <select id="selectUserNameById" resultType="java.lang.String">
+    <resultMap id="userMap" type="com.keaper.classroom.modal.User">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="register_time" property="registerTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectUserByAccount" parameterType="java.lang.String" resultMap="userMap">
       SELECT
-        username
+        id,
+        type,
+        account,
+        phone,
+        password,
+        email,
+        register_time,
+        update_time
       FROM
         user
-      OFFSET #{offset}
-      LIMIT #{limit}
+      WHERE
+        account = #{account}
+    </select>
+
+    <select id="selectUserById" resultMap="userMap">
+        SELECT
+        id,
+        type,
+        account,
+        phone,
+        password,
+        email,
+        register_time,
+        update_time
+      FROM
+        user
+      WHERE
+        id = #{id}
+    </select>
+
+    <select id="selectUserList" resultMap="userMap">
+        SELECT
+          id,
+          type,
+          account,
+          phone,
+          password,
+          email,
+          register_time,
+          update_time
+        FROM
+          user
+        <where>
+            <if test="type != null">
+                type = #{type}
+            </if>
+            <if test="key != null">
+                AND(
+                account LIKE CONCAT(CONCAT('%', #{key}), '%')
+                OR
+                phone LIKE CONCAT(CONCAT('%', #{key}), '%')
+                OR
+                email LIKE CONCAT(CONCAT('%', #{key}), '%')
+                )
+            </if>
+        </where>
+        limit #{limit}
+        offset #{offset}
     </select>
 
 
+    <update id="updateUser">
+        UPDATE
+          user
+        <set>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="password">
+                password = #{password}
+            </if>
+        </set>
+        WHERE
+            account = #{account}
+    </update>
 
 </mapper>

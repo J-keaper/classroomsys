@@ -14,7 +14,7 @@ class CustomBreadcrumb extends React.Component {
                     this.props.path.map((v,i)=>{
                         return (
                             <Breadcrumb.Item key={i}>
-                                 v.link !== "" ? <Link to={v.link}>{v.text}</Link> : v.text
+                                {v.link !== "" ? <Link to={v.link}>{v.text}</Link> : v.text}
                             </Breadcrumb.Item>
                         );
                     })

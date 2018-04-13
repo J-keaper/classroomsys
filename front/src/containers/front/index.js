@@ -7,13 +7,14 @@ import {FrontRouter as ContentRouter} from "../../routers/index"
 const {Content} = Layout;
 
 class FrontApp extends React.Component{
+
     render(){
         return (
             <Layout style={{height:"100%"}}>
                 <HeadBar/>
                 <Content>
                     <ContentRouter/>
-                </Content>
+               </Content>
                 <Footer/>
             </Layout>
         );

@@ -1,124 +1,91 @@
 import React from 'react';
 import Breadcrumb from "../../../components/Breadcrumb/index";
-import {Button, Col, Modal, Row, Table} from 'antd';
-
-const columns = [{
-    title: '教室',
-    dataIndex:'classroom',
-    key: 'classroom',
-}, {
-    title: '申请人',
-    dataIndex:'applicant',
-    key: 'applicant',
-}, {
-    title: '申请时间',
-    dataIndex:'applyTime',
-    key: 'applyTime',
-}, {
-    title: '状态',
-    dataIndex:'status',
-    key: 'status',
-}, {
-    title: '操作',
-    key: 'operation',
-    render:(text)=>(
-        <span>
-            <a href="#">详情</a>
-        </span>
-    )
-}];
-
-const data = [{
-    key: '1',
-    classroom: "#11210",
-    status:"待审核",
-    applicant: '1407084125',
-    applyTime:"2017-08-20",
-}, {
-    key: '2',
-    classroom: "#15412",
-    status:"待审核",
-    applicant: '1407084125',
-    applyTime:"2017-08-20",
-},{
-    key: '3',
-    classroom: "#11210",
-    status:"待审核",
-    applicant: '1407084125',
-    applyTime:"2017-08-20",
-}];
+import {Divider, Modal, Table} from 'antd';
+import {bindActionCreators} from "redux";
+import {getApplyList} from "../../../redux/action";
+import {connect} from "react-redux";
+import DetailModal from "./DetailModal";
+import moment from "moment";
+import {Link} from "react-router-dom";
 
 class Apply extends  React.Component{
+    constructor(){
+        super();
+        this.columns = [ {
+            title: '申请人',
+            key: 'applicant',
+            render:(text,record)=>(
+                record.applicant.account
+            )
+        }, {
+            title: '申请时间',
+            key: 'applyTime',
+            render:(text,record)=>(
+                moment(record.createTime).format("YYYY-MM-DD HH:mm")
+            )
+        }, {
+            title: '状态',
+            key: 'status',
+            render:(text,record)=>(
+                record.status.desc
+            )
+        }, {
+            title: '操作',
+            key: 'operation',
+            render:(text,record)=>(
+                <span>
+                    <a onClick={() => this.handleDetail(record)}>详情</a>
+                    <Divider type="vertical" />
+                    <Link to={`/admin/apply/audit/${record.id}`}>审核</Link>
+                </span>
+            )
+        }];
+
+        this.state = {
+            detailModalVisible:false,
+            detailApply:{}
+        };
+    }
+
+    componentWillMount(){
+        this.props.getApplyList(1);
+    }
+
+    handleDetail = (apply) => {
+        this.setState({detailModalVisible:true,detailApply:apply})
+    };
+
+
+    handleDetailCancel  = () => {
+        this.setState({detailModalVisible:false})
+    };
+
+
     render(){
+        const {applyList} = this.props;
         return (
             <div>
                 <Breadcrumb path={[{text:"教室申请",link:""}]}/>
-                <Table style={{margin:20,marginTop:0}} columns={columns} dataSource={data}/>
-                <Modal
-                    visible={false}
-                    title="详情"
-                    footer={
-                        <div>
-                            <Button type="danger">拒绝</Button>
-                            <Button type="primary">通过</Button>
-                        </div>
-                    }>
-                    <Row style={{margin:5}}>
-                        <Col span={4} style={{textAlign:"right"}}>申请人：</Col>
-                        <Col span={20}>
-                            {data[1].applicant}
-                        </Col>
-                    </Row>
-                    <Row style={{margin:5}}>
-                        <Col span={4} style={{textAlign:"right"}}>申请教室：</Col>
-                        <Col span={20}>
-                            {data[1].classroom}
-                        </Col>
-                    </Row>
-                    <Row style={{margin:5}}>
-                        <Col span={4} style={{textAlign:"right"}}>申请用途：</Col>
-                        <Col span={20}>
-                            社团活动
-                        </Col>
-                    </Row>
-                    <Row style={{margin:5}}>
-                        <Col span={4} style={{textAlign:"right"}}>申请时间：</Col>
-                        <Col span={20}>
-                            {data[1].applyTime}
-                        </Col>
-                    </Row>
-                    <Row style={{margin:5}}>
-                        <Col span={4} style={{textAlign:"right"}}>当前状态：</Col>
-                        <Col span={20}>
-                            {data[1].status}
-                        </Col>
-                    </Row>
-                    <Row style={{margin:5}}>
-                        <Col span={4} style={{textAlign:"right"}}>审核人：</Col>
-                        <Col span={20}>
-                            admin1
-                        </Col>
-                    </Row>
-                    <Row style={{margin:5}}>
-                        <Col span={4} style={{textAlign:"right"}}>审核时间：</Col>
-                        <Col span={20}>
-                            2017-08-20 12:12
-                        </Col>
-                    </Row>
-                    <Row style={{margin:5}}>
-                        <Col span={4} style={{textAlign:"right"}}>拒绝原因：</Col>
-                        <Col span={20}>
-                            时间冲突
-                        </Col>
-                    </Row>
-
+                <Table style={{margin:20,marginTop:0}} columns={this.columns}
+                       dataSource={applyList} rowKey={"id"}/>
+                <Modal title="详情" footer={null}
+                       visible={this.state.detailModalVisible}
+                       onCancel={this.handleDetailCancel}>
+                    <DetailModal applyInfo={this.state.detailApply}/>
                 </Modal>
-
             </div>
         );
     }
 }
 
-export default Apply;
+const mapStateToProps = state => ({
+    applyList:state.apply.applyList
+});
+
+const mapDispatchToProps = dispatch => ({
+    getApplyList:bindActionCreators(getApplyList,dispatch)
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(Apply);
 
 

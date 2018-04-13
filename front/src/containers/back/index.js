@@ -21,11 +21,10 @@ class App extends React.Component {
         });
     };
 
-
     render() {
         return (
             <Layout style={{height:"100%"}}>
-                <SideBar collapsed={this.state.collapsed} />
+                <SideBar collapsed={this.state.collapsed} menus={menus} />
                 <Layout>
                     <HeadBar collapsed={this.state.collapsed} toggle={this.toggle}/>
                     <Content>

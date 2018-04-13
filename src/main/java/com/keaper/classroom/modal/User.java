@@ -1,14 +1,18 @@
 package com.keaper.classroom.modal;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.keaper.classroom.enums.UserType;
+
 import java.util.Date;
 
 public class User {
     private long id;
 
-    private int type;
+    private UserType type;
 
     private String account;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
 
     private String phone;
@@ -27,11 +31,11 @@ public class User {
         this.id = id;
     }
 
-    public int getType() {
+    public UserType getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(UserType type) {
         this.type = type;
     }
 

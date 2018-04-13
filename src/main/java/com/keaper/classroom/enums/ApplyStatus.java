@@ -1,8 +1,13 @@
 package com.keaper.classroom.enums;
 
-public enum ApplyStatus {
-    ;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum ApplyStatus {
+    PENDING(1,"待审核"),
+    PASSED(2,"审核通过"),
+    DENIED(3,"审核未通过"),
+    ;
 
     private int code;
     private String desc;
@@ -13,6 +18,15 @@ public enum ApplyStatus {
         this.desc = desc;
     }
 
+    public static ApplyStatus codeOf(int code){
+        for(ApplyStatus applyStatus : ApplyStatus.values()){
+            if(applyStatus.getCode() == code){
+                return applyStatus;
+            }
+        }
+        return null;
+    }
+    
     public int getCode() {
         return code;
     }
