@@ -3,7 +3,6 @@ package com.keaper.classroom.service;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.keaper.classroom.enums.ApplyPurpose;
 import com.keaper.classroom.enums.ApplyStatus;
 import com.keaper.classroom.modal.Apply;
 import com.keaper.classroom.modal.ApplyInfo;
@@ -11,10 +10,8 @@ import com.keaper.classroom.modal.filter.ApplyFilter;
 import com.keaper.classroom.persistence.dao.ApplyDao;
 import com.keaper.classroom.persistence.dao.ClassroomDao;
 import com.keaper.classroom.persistence.dao.UserDao;
-import com.sun.istack.internal.NotNull;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
@@ -38,7 +35,6 @@ public class ApplyService {
 
     }
 
-
     public List<ApplyInfo> getApplyList(ApplyFilter filter){
         int offset = (filter.getPageCount()-1)*filter.getPageSize();
         if(offset < 0){
@@ -54,6 +50,10 @@ public class ApplyService {
         });
     }
 
+    public int getApplyCount(ApplyFilter filter){
+        return applyDao.countApplyList(filter.getApplicant(),
+                filter.getApplyStatus() == null ? null : filter.getApplyStatus().getCode());
+    }
 
     public ApplyInfo getApplyById(long id){
         return apply2ApplyInfo(applyDao.getApplyById(id));

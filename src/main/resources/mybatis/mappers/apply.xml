@@ -22,31 +22,47 @@
 
     <select id="getApplyList" resultMap="applyMap">
         SELECT
-          id,
-          applicant_id,
-          apply_purpose,
-          apply_reason,
-          capacity,
-          start_time,
-          end_time,
-          create_time,
-          status,
-          auditor_id,
-          audit_time,
-          audit_result,
-          classroom
+          a.id,
+          a.applicant_id,
+          a.apply_purpose,
+          a.apply_reason,
+          a.capacity,
+          a.start_time,
+          a.end_time,
+          a.create_time,
+          a.status,
+          a.auditor_id,
+          a.audit_time,
+          a.audit_result,
+          a.classroom
         FROM
-          apply
+          apply a LEFT JOIN user u ON a.applicant_id = u.id
         <where>
             <if test="applicant != null">
-                applicant = #{applicant}
+                u.account LIKE CONCAT(CONCAT('%', #{applicant}), '%')
             </if>
             <if test="status != null">
-                AND status = #{status}
+                AND a.status = #{status}
             </if>
         </where>
+        ORDER BY a.create_time
         limit #{limit}
         offset #{offset}
+    </select>
+
+    <select id="countApplyList" resultType="java.lang.Integer">
+        SELECT
+          COUNT(*)
+        FROM
+        apply a LEFT JOIN user u ON a.applicant_id = u.id
+        <where>
+            <if test="applicant != null">
+                u.account LIKE CONCAT(CONCAT('%', #{applicant}), '%')
+            </if>
+            <if test="status != null">
+                AND a.status = #{status}
+            </if>
+        </where>
     </select>
 
     <select id="getApplyById" resultMap="applyMap">

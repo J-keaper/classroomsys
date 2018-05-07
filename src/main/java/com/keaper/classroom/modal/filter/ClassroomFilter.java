@@ -60,7 +60,12 @@ public class ClassroomFilter extends CommonFilter {
                 null,null,null,null);
     }
 
-
+    public static ClassroomFilter of(String searchCampus,String searchBuilding,
+                                     ClassroomStatus searchStatus, String searchNumber,
+                                     int pageCount, int pageSize){
+        return new ClassroomFilter(pageCount,pageSize,
+                searchBuilding,searchCampus,searchStatus,searchNumber);
+    }
 
 
 }

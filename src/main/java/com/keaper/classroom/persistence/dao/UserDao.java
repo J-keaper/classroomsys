@@ -25,6 +25,8 @@ public interface UserDao {
                               @Param("offset") int offset, @Param("limit") int limit);
 
 
+    int countUserList(@Param("type") Integer type, @Param("key") String key);
+
     /**
      * phone,email,password at least one is not null
      * @param account can not be null

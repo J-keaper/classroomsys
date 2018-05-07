@@ -62,6 +62,10 @@ public class UserService {
                 userFilter.getKeyWord(), offset, userFilter.getPageSize());
     }
 
+    public int getUserCount(UserFilter userFilter){
+        return userDao.countUserList(userFilter.getType() != null ? userFilter.getType().getCode() :null,
+                userFilter.getKeyWord());
+    }
 
 
     public boolean updateUser(String account, String phone, String email, String password){

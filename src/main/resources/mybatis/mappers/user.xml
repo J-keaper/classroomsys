@@ -63,7 +63,7 @@
                 type = #{type}
             </if>
             <if test="key != null">
-                AND(
+                AND (
                 account LIKE CONCAT(CONCAT('%', #{key}), '%')
                 OR
                 phone LIKE CONCAT(CONCAT('%', #{key}), '%')
@@ -76,6 +76,26 @@
         offset #{offset}
     </select>
 
+    <select id="countUserList" resultType="java.lang.Integer">
+        SELECT
+          COUNT(*)
+        FROM
+        user
+        <where>
+            <if test="type != null">
+                type = #{type}
+            </if>
+            <if test="key != null">
+                AND (
+                account LIKE CONCAT(CONCAT('%', #{key}), '%')
+                OR
+                phone LIKE CONCAT(CONCAT('%', #{key}), '%')
+                OR
+                email LIKE CONCAT(CONCAT('%', #{key}), '%')
+                )
+            </if>
+        </where>
+    </select>
 
     <update id="updateUser">
         UPDATE

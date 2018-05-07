@@ -6,39 +6,40 @@ import API from '../../api';
 
 const defaultPageSize = 20;
 
-export function getCommonType() {
+export function getCommonConstant() {
     return async (dispatch) => {
         dispatch(fetchingData(true));
-        let result = await API.getCommonType();
+        let result = await API.getCommonConstant();
         dispatch(receivedCommonType(result.ret ? result.data : {}));
         dispatch(fetchingData(false));
     };
 }
 
-export function getUserList(pageCount = 1,pageSize = defaultPageSize) {
+export function getUserList(searchKey = "" , searchType = -1,pageCount = 1,pageSize = defaultPageSize) {
     return async (dispatch)=>{
         dispatch(fetchingData(true));
-        let result = await API.getUserList(pageCount,pageSize);
+        let result = await API.getUserList(searchKey,searchType,pageCount,pageSize);
         dispatch(receivedUserList(result.ret ? result.data : {}));
         dispatch(fetchingData(false));
     }
 }
 
 
-export function getClassroomList(pageCount = 1,pageSize = defaultPageSize) {
+export function getClassroomList(searchCampus = -1, searchBuilding = -1,
+                                 searchStatus = -1, searchNumber = "",
+                                 pageCount = 1,pageSize = defaultPageSize) {
     return async (dispatch)=>{
         dispatch(fetchingData(true));
-        let result = await API.getClassroomList(pageCount,pageSize);
+        let result = await API.getClassroomList(searchCampus,searchBuilding, searchStatus,searchNumber, pageCount,pageSize);
         dispatch(receivedClassroomList(result.ret ? result.data : {}));
         dispatch(fetchingData(false));
     }
 }
 
-export function getApplyList(pageCount = 1,pageSize = defaultPageSize) {
+export function getApplyList( searchApplicant = "", searchStatus = -1, pageCount = 1,pageSize = defaultPageSize) {
     return async (dispatch)=>{
         dispatch(fetchingData(true));
-        let result = await API.getApplyList(pageCount,pageSize);
-        console.log(result);
+        let result = await API.getApplyList(searchApplicant,searchStatus,pageCount,pageSize);
         dispatch(receivedApplyList(result.ret ? result.data : {}));
         dispatch(fetchingData(false));
     }
@@ -76,19 +77,19 @@ const receivedCommonType = (data) => ({
     data
 });
 
-const receivedUserList = (userList) => ({
+const receivedUserList = (user) => ({
     type:RECEIVED_USER_LIST,
-    userList
+    user
 });
 
-const receivedClassroomList = (classroomList) => ({
+const receivedClassroomList = (classroom) => ({
    type:RECEIVED_CLASSROOM_LIST,
-   classroomList
+   classroom
 });
 
-const receivedApplyList = (applyList) => ({
+const receivedApplyList = (apply) => ({
     type:RECEIVED_APPLY_LIST,
-    applyList
+    apply
 });
 
 const receivedAuditApply = (auditApply) => ({

@@ -27,9 +27,16 @@ public class ClassroomService {
         if(offset < 0){
             offset = 0;
         }
-        return classroomDao.getClassroomList(filter.getBuilding(), filter.getCampus(),
+        return classroomDao.getClassroomList(filter.getCampus(),filter.getBuilding(),
                 filter.getStatus() == null ?  null :filter.getStatus().getCode(),
                 filter.getNumber(), offset, filter.getPageSize());
+    }
+
+    public int getClassroomCount(ClassroomFilter filter){
+        return classroomDao.countClassroomList(filter.getCampus(),filter.getBuilding(),
+                filter.getStatus() == null ?  null :filter.getStatus().getCode(),
+                filter.getNumber());
+
     }
 
 
