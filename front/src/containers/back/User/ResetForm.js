@@ -49,7 +49,7 @@ class DetailForm extends React.Component{
                             min:8,
                             max:20,
                             pattern:"^[\\w]{8,20}$",
-                            message:"密码长度在6~18之间，只能包含字母、数字和下划线"
+                            message:"密码长度在8~20之间，只能包含字母、数字和下划线"
                         },],
                         initialValue:user ? user.account : ""
                     })(

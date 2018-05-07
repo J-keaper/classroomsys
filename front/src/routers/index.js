@@ -3,9 +3,12 @@ import {Route, Switch} from 'react-router-dom';
 import AdminHome from "../containers/back/Home";
 import AdminApply from "../containers/back/Apply";
 import AdminUser from "../containers/back/User";
+import AdminUserImport from "../containers/back/User/UserImport";
 import AdminClassroom from "../containers/back/Classroom";
+import AdminClassroomImport from "../containers/back/Classroom/ClassroomImport";
 import AdminHelp from "../containers/back/Help";
 import AdminApplyAudit from '../containers/back/Audit';
+
 import Apply from '../containers/front/Apply';
 import Classroom from '../containers/front/Classroom';
 
@@ -16,8 +19,10 @@ export  class AdminRouter extends React.Component{
                 <Route path="/admin" exact component={AdminHome}/>
                 <Route path="/admin/apply" exact component={AdminApply}/>
                 <Route path="/admin/apply/audit/:id" component={AdminApplyAudit}/>
-                <Route path="/admin/user" component={AdminUser}/>
-                <Route path="/admin/classroom" component={AdminClassroom}/>
+                <Route path="/admin/user" exact component={AdminUser}/>
+                <Route path="/admin/user/import" exact component={AdminUserImport}/>
+                <Route path="/admin/classroom" exact component={AdminClassroom}/>
+                <Route path="/admin/classroom/import" exact component={AdminClassroomImport}/>
                 <Route path="/admin/help" component={AdminHelp}/>
             </Switch>
         );

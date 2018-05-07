@@ -5,12 +5,13 @@ class API {
         return await API.post("/api/user/login",params);
     }
 
-    static async getCommonType(){
-        return await API.get("/api/common/type");
+    static async getCommonConstant(){
+        return await API.get("/api/common/constant");
     }
 
-    static async getUserList(pageCount,pageSize){
-        return await API.get("/api/user/list",{pc:pageCount,ps:pageSize});
+    static async getUserList(searchKey,searchType,pageCount,pageSize){
+        return await API.get("/api/user/list",
+            {sk:searchKey,st:searchType,pc:pageCount,ps:pageSize});
     }
 
     static async updateUserInfo(account,phone,email){
@@ -28,13 +29,15 @@ class API {
         return await API.post("/api/user/update",params);
     }
 
-    static async getClassroomList(pageCount,pageSize){
-        return await API.get("/api/classroom/list",{pc:pageCount,ps:pageSize});
+    static async getClassroomList(searchCampus,searchBuilding, searchStatus,searchNumber,pageCount,pageSize){
+        return await API.get("/api/classroom/list",
+            {sc:searchCampus,sb:searchBuilding,ss:searchStatus,sn:searchNumber,pc:pageCount,ps:pageSize});
     }
 
 
-    static async getApplyList(pageCount,pageSize){
-        return await API.get("/api/apply/list",{pc:pageCount,ps:pageSize});
+    static async getApplyList(searchApplicant,searchStatus,pageCount,pageSize){
+        return await API.get("/api/apply/list",
+            {sa:searchApplicant, ss:searchStatus, pc:pageCount,ps:pageSize});
     }
 
     static async getAuditApply(id){

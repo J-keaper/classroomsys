@@ -16,4 +16,8 @@ public class UserDaoTest extends SpringBaseTest{
         System.out.println(user);
     }
 
+    @Test
+    public void countUserList() {
+        System.out.println(userDao.countUserList(11,"25"));
+    }
 }

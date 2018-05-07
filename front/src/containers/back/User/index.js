@@ -1,14 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import Breadcrumb from "../../../components/Breadcrumb/index";
-import {Divider, Modal, Table, message} from 'antd';
-import {getCommonType, getUserList} from "../../../redux/action";
+import {Divider, Modal, Table, message, Input, Select} from 'antd';
+import {getCommonConstant, getUserList} from "../../../redux/action";
 import {bindActionCreators} from "redux";
 import DetailForm from './DetailForm';
 import ResetForm from './ResetForm';
 import API from "../../../api";
 
-
+const Option = Select.Option;
 class User extends React.Component{
 
     constructor(){
@@ -42,20 +42,34 @@ class User extends React.Component{
                 </div>
             )
         }];
+        this.defaultPageSize = 10;
+
         this.state={
+            pagination: {defaultPageSize:this.defaultPageSize},
             detailModalVisible:false,
             detailUser:{},
             resetModalVisible:false,
             resetUser:{},
+            searchKey:"",
+            searchType:-1,
         }
     }
 
-    componentWillMount(){
+    componentDidMount = async() => {
         if(this.props.userType !== {}){
-            this.props.getCommonType();
+            this.props.getCommonConstant();
         }
-        this.props.getUserList(1);
-    }
+        await this.getUserList(1);
+    };
+
+    getUserList = async(pageCount = 1,pageSize = this.defaultPageSize) => {
+        await this.props.getUserList(this.state.searchKey,this.state.searchType,pageCount,pageSize);
+        const pagination = { ...this.state.pagination };
+        pagination.total = this.props.userCount;
+        pagination.current = pageCount;
+        this.setState({pagination});
+    };
+
 
     handleEdit = (user) => {
         this.setState({detailModalVisible:true, detailUser:user});
@@ -116,16 +130,51 @@ class User extends React.Component{
         this.setState({resetModalVisible:false});
     };
 
+    handleSearch = async() => {
+        await this.getUserList(1);
+    };
+
+    handleSearchKeyChange = (e) => {
+        this.setState({searchKey:e.target.value});
+    };
+
+    handleSearchTypeChange = (v) => {
+        this.setState({searchType:v},this.handleSearch);
+    };
+
+    handleTableChange = async (pagination, filters, sorter) => {
+        await this.getUserList(pagination.current);
+    };
 
     render(){
-        const {userList} = this.props;
+        const {userType,userList,loading} = this.props;
         return(
             <div>
                 <Breadcrumb path={[{text:"用户管理",link:""}]}/>
+                <div style={{margin:20,marginTop:0}}>
+                    <Input style={{width:200,marginRight:50}} placeholder="账户名/邮箱/手机号"
+                           onChange={this.handleSearchKeyChange}
+                           onBlur={this.handleSearch} />
+                    类型：<Select style={{width:200}} placeholder="选择类型"
+                               optionFilterProp="children" defaultValue={-1}
+                               onChange={this.handleSearchTypeChange}
+                >
+                    <Option key={-1} value={-1}>全部</Option>
+                    {userType &&
+                    Object.values(userType).map((v,i)=>(
+                        <Option key={i} value={v.code}>{v.desc}</Option>
+                    ))
+                    }
+                    </Select>
+                </div>
                 <Table style={{margin:20,marginTop:0}}
-                       columns={this.columns}
-                       dataSource={userList}
-                       rowKey="id"/>
+                       columns={this.columns} rowKey="id"
+                       dataSource={userList !== undefined ? userList : []}
+                       pagination={this.state.pagination}
+                       loading={!!loading}
+                       onChange={this.handleTableChange}
+                />
+
                 <Modal title="详情" okText="确定" cancelText="取消" destroyOnClose={true}
                        visible={this.state.detailModalVisible}
                        onCancel={this.handleEditCancel}
@@ -147,12 +196,14 @@ class User extends React.Component{
 }
 
 const mapStateToProps = state => ({
+    userCount:state.user.userCount,
     userList:state.user.userList,
-    userType:state.common.userType ? state.common.userType : {}
+    userType:state.common.userType,
+    loading:state.common.fetching
 });
 
 const mapDispatchToProps = dispatch => ({
-    getCommonType:bindActionCreators(getCommonType,dispatch),
+    getCommonConstant:bindActionCreators(getCommonConstant,dispatch),
     getUserList:bindActionCreators(getUserList,dispatch)
 });
 

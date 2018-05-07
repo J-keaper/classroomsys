@@ -29,6 +29,7 @@
   "dependencies": {
     "antd": "^3.1.6",
     "axios": "^0.18.0",
+    "fs": "0.0.1-security",
     "moment": "^2.22.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -36,6 +37,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "xlsx": "^0.12.12"
   }
 }

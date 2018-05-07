@@ -26,6 +26,19 @@
           number = #{number}
     </select>
 
+    <select id="getCampusList" resultType="java.lang.String">
+        SELECT
+          DISTINCT campus
+        from
+          classroom
+    </select>
+
+    <select id="getBuildingList" resultType="java.lang.String">
+        SELECT
+          DISTINCT building
+        from
+          classroom
+    </select>
 
     <select id="getClassroomList"  resultMap="classroomMap">
         SELECT
@@ -55,5 +68,25 @@
         offset #{offset}
     </select>
 
+    <select id="countClassroomList" resultType="java.lang.Integer">
+        SELECT
+          COUNT(*)
+        FROM
+        classroom
+        <where>
+            <if test="building != null">
+                building = #{building}
+            </if>
+            <if test="campus != null">
+                AND campus = #{campus}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="number != null">
+                AND number LIKE CONCAT(CONCAT('%', #{number}), '%')
+            </if>
+        </where>
+    </select>
 
 </mapper>
