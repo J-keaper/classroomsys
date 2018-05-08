@@ -47,5 +47,15 @@ public class ClassroomController {
     }
 
 
+    @RequestMapping(method = RequestMethod.POST,path = "import")
+    @ResponseBody
+    public JsonResult importUser(@RequestParam(value = "cl")String classroomList){
+        boolean result = classroomService.batchImportUser(classroomList);
+        if(!result){
+            return JsonResult.getErrorResult(JsonResult.Result.ERROR,"导入失败！");
+        }
+        return JsonResult.getCorrectResult("导入成功！");
+    }
+
 
 }

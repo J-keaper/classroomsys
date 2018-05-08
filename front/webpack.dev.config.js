@@ -46,6 +46,9 @@ module.exports = {
         proxy:{
             "/api":{
                 target:"http://localhost:8080"
+            },
+            "/file":{
+                target:"http://localhost:8080"
             }
         }
     },

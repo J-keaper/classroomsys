@@ -30,4 +30,11 @@ public class UserServiceTest extends SpringBaseTest{
         List<User> userList = userService.getUserList(1,10);
 
     }
+
+    @Test
+    public void batchImportUser() {
+        String json = "[{\"no\":\"0\",\"account\":\"1407084101 \",\"phone\":\"18434361009\",\"email\":\"1273570695@qq.com\",\"type\":{\"code\":11,\"desc\":\"学生\"}},{\"no\":\"1\",\"account\":\"1407084102 \",\"phone\":\"18434361010\",\"email\":\"1273570696@qq.com\",\"type\":{\"code\":11,\"desc\":\"学生\"}},{\"no\":\"2\",\"account\":\"1407084103 \",\"phone\":\"18434361011\",\"email\":\"1273570697@qq.com\",\"type\":{\"code\":11,\"desc\":\"学生\"}}]";
+        boolean result = userService.batchImportUser(json);
+        System.out.println(result);
+    }
 }

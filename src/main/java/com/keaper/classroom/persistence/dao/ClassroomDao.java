@@ -36,4 +36,5 @@ public interface ClassroomDao {
                            @Param("number") String number);
 
 
+    int batchAddClassroom(@Param("classroomList") List<Classroom> classroomList);
 }

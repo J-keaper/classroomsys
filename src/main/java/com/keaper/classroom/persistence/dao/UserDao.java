@@ -27,6 +27,8 @@ public interface UserDao {
 
     int countUserList(@Param("type") Integer type, @Param("key") String key);
 
+    int batchAddUser(@Param("userList") List<User> userList);
+
     /**
      * phone,email,password at least one is not null
      * @param account can not be null
