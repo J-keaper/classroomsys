@@ -29,9 +29,23 @@ class API {
         return await API.post("/api/user/update",params);
     }
 
+    static async importUserList(userList){
+        let params = new URLSearchParams();
+        params.append("ul",JSON.stringify(userList));
+        return await API.post("/api/user/import",params);
+    }
+
+
     static async getClassroomList(searchCampus,searchBuilding, searchStatus,searchNumber,pageCount,pageSize){
         return await API.get("/api/classroom/list",
             {sc:searchCampus,sb:searchBuilding,ss:searchStatus,sn:searchNumber,pc:pageCount,ps:pageSize});
+    }
+
+
+    static async importClassroomList(classroomList){
+        let params = new URLSearchParams();
+        params.append("cl",JSON.stringify(classroomList));
+        return await API.post("/api/classroom/import",params);
     }
 
 

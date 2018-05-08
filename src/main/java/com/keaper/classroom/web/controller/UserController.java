@@ -3,10 +3,11 @@ package com.keaper.classroom.web.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.keaper.classroom.common.JsonResult;
 import com.keaper.classroom.enums.UserType;
-import com.keaper.classroom.modal.User;
 import com.keaper.classroom.modal.filter.UserFilter;
 import com.keaper.classroom.service.UserService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +20,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/api/user")
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 
     @Resource
@@ -38,6 +40,16 @@ public class UserController {
         result.put("userList",userService.getUserList(filter));
         result.put("userCount",userService.getUserCount(filter));
         return JsonResult.getCorrectResult(result);
+    }
+
+    @RequestMapping(method = RequestMethod.POST,path = "import")
+    @ResponseBody
+    public JsonResult importUser(@RequestParam(value = "ul")String userList){
+        boolean result = userService.batchImportUser(userList);
+        if(!result){
+            return JsonResult.getErrorResult(JsonResult.Result.ERROR,"导入失败！");
+        }
+        return JsonResult.getCorrectResult("导入成功！");
     }
 
     @RequestMapping(method = RequestMethod.POST,path = "update")

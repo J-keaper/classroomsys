@@ -13,11 +13,19 @@ export const menus = [
     },
     {
         key: '/admin/user', title: '用户管理', icon: 'user',
-        sub: [],
+        sub: [{
+            key: '/admin/user', title: '用户信息', icon: 'user',
+        },{
+                key: '/admin/user/import', title: '用户导入', icon: 'login',
+        }],
     },
     {
         key: '/admin/classroom', title: '教室管理', icon: 'database',
-        sub: [],
+        sub: [{
+            key: '/admin/classroom', title: '教室信息', icon: 'database',
+        }, {
+            key: '/admin/classroom/import', title: '教室导入', icon: 'login',
+        }],
     },
     {
         key: '/admin/help', title: '帮助', icon: 'info',

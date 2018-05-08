@@ -89,4 +89,26 @@
         </where>
     </select>
 
+
+    <insert id="batchAddClassroom">
+        INSERT INTO
+          classroom
+        (
+          campus,
+          building,
+          number,
+          seating,
+          status
+        )VALUES
+        <foreach collection="classroomList" item="classroom" separator=",">
+          (
+            #{classroom.campus},
+            #{classroom.building},
+            #{classroom.number},
+            #{classroom.seating},
+            #{classroom.status}
+          )
+        </foreach>
+    </insert>
+
 </mapper>

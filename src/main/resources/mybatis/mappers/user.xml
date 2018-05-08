@@ -97,6 +97,33 @@
         </where>
     </select>
 
+
+    <insert id="batchAddUser">
+        INSERT INTO
+          user
+        (
+          account,
+          password,
+          phone,
+          email,
+          type,
+          register_time,
+          update_time
+        )VALUES
+        <foreach collection="userList" item="user" separator="," >
+          (
+            #{user.account},
+            #{user.password},
+            #{user.phone},
+            #{user.email},
+            #{user.type},
+            NOW(),
+            NOW()
+          )
+        </foreach>
+    </insert>
+
+
     <update id="updateUser">
         UPDATE
           user

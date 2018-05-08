@@ -1,8 +1,12 @@
 package com.keaper.classroom.service;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.keaper.classroom.enums.UserType;
 import com.keaper.classroom.modal.User;
 import com.keaper.classroom.modal.filter.UserFilter;
 import com.keaper.classroom.persistence.dao.UserDao;
@@ -66,6 +70,30 @@ public class UserService {
         return userDao.countUserList(userFilter.getType() != null ? userFilter.getType().getCode() :null,
                 userFilter.getKeyWord());
     }
+
+    public boolean batchImportUser (String userListJson) {
+        List<User> userList = parseUserList(userListJson);
+        return userDao.batchAddUser(userList) > 0;
+    }
+
+
+    public List<User> parseUserList(String userListJson){
+        List<User> userList = Lists.newArrayList();
+        JSONArray ja = JSON.parseArray(userListJson);
+        for(Object o : ja){
+            User user = new User();
+            JSONObject jo = (JSONObject)o;
+            user.setAccount(jo.getString("account"));
+            user.setPassword(EncryptUtil.EncryptPassword(user.getAccount(),user.getAccount()));
+            user.setPhone(jo.getString("phone"));
+            user.setEmail(jo.getString("email"));
+            user.setType(UserType.codeOf(jo.getJSONObject("type").getInteger("code")));
+            userList.add(user);
+        }
+        return userList;
+    }
+
+
 
 
     public boolean updateUser(String account, String phone, String email, String password){
