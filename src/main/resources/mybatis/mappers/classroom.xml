@@ -111,4 +111,13 @@
         </foreach>
     </insert>
 
+    <update id="updateStatus" >
+        UPDATE
+          classroom
+        SET
+          status = #{status}
+        WHERE
+          number = #{classroom}
+    </update>
+
 </mapper>

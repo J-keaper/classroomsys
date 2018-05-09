@@ -4,6 +4,7 @@ package com.keaper.classroom.service;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.keaper.classroom.enums.ApplyStatus;
+import com.keaper.classroom.enums.ClassroomStatus;
 import com.keaper.classroom.modal.Apply;
 import com.keaper.classroom.modal.ApplyInfo;
 import com.keaper.classroom.modal.filter.ApplyFilter;
@@ -12,6 +13,7 @@ import com.keaper.classroom.persistence.dao.ClassroomDao;
 import com.keaper.classroom.persistence.dao.UserDao;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
@@ -32,7 +34,6 @@ public class ApplyService {
 
     public List<ApplyInfo> getApplyList(int pageCount,int pageSize){
         return getApplyList(ApplyFilter.of(pageCount,pageSize));
-
     }
 
     public List<ApplyInfo> getApplyList(ApplyFilter filter){
@@ -69,11 +70,15 @@ public class ApplyService {
     }
 
 
+    @Transactional
     public boolean auditApply(long id,long auditorId,boolean pass,String opinion,String classroom){
         ApplyStatus status = pass ? ApplyStatus.PASSED : ApplyStatus.DENIED;
-        return applyDao.updateAuditInfo(id,auditorId,status.getCode(),opinion,classroom) > 0;
+        if(status == ApplyStatus.DENIED){
+            return applyDao.updateAuditInfo(id,auditorId,status.getCode(),opinion,classroom) > 0;
+        }
+        return classroomDao.updateStatus(classroom,ClassroomStatus.ACTIVITY.getCode()) > 0 &&
+                applyDao.updateAuditInfo(id,auditorId,status.getCode(),opinion,classroom) > 0;
     }
-
 
 
     private ApplyInfo apply2ApplyInfo(Apply apply){
