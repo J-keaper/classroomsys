@@ -10,6 +10,8 @@ public class User {
 
     private UserType type;
 
+    private String name;
+
     private String account;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -37,6 +39,14 @@ public class User {
 
     public void setType(UserType type) {
         this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAccount() {

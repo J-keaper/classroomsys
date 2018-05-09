@@ -32,6 +32,15 @@ class DetailForm extends React.Component{
                 </Form.Item>
                 <Form.Item
                     {...formItemLayout}
+                    label="姓名">
+                    {getFieldDecorator('name', {
+                        initialValue:user ? user.name : ""
+                    })(
+                        user ? <Input readOnly/> : <Input/>
+                    )}
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
                     label="手机">
                     {getFieldDecorator('phone', {
                         initialValue:user ? user.phone : ""

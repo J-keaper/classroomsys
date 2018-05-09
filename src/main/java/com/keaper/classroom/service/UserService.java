@@ -84,6 +84,7 @@ public class UserService {
             User user = new User();
             JSONObject jo = (JSONObject)o;
             user.setAccount(jo.getString("account"));
+            user.setName(jo.getString("name"));
             user.setPassword(EncryptUtil.EncryptPassword(user.getAccount(),user.getAccount()));
             user.setPhone(jo.getString("phone"));
             user.setEmail(jo.getString("email"));
@@ -98,7 +99,8 @@ public class UserService {
 
     public boolean updateUser(String account, String phone, String email, String password){
         return userDao.updateUser(account,phone,email,
-                EncryptUtil.EncryptPassword(account,password)) > 0;
+                StringUtils.isEmpty(password) ? null :
+                        EncryptUtil.EncryptPassword(account,password)) > 0;
     }
 
 }

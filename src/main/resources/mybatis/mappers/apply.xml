@@ -39,7 +39,9 @@
           apply a LEFT JOIN user u ON a.applicant_id = u.id
         <where>
             <if test="applicant != null">
-                u.account LIKE CONCAT(CONCAT('%', #{applicant}), '%')
+                (u.account LIKE CONCAT(CONCAT('%', #{applicant}), '%')
+                OR
+                u.name LIKE CONCAT(CONCAT('%', #{applicant}), '%'))
             </if>
             <if test="status != null">
                 AND a.status = #{status}

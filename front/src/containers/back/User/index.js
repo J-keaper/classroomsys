@@ -17,6 +17,10 @@ class User extends React.Component{
             title: '账号',
             dataIndex:'account',
             key: 'account',
+        },{
+            title: '姓名',
+            dataIndex:'name',
+            key: 'name',
         }, {
             title: '邮箱',
             dataIndex:'email',
@@ -152,7 +156,7 @@ class User extends React.Component{
             <div>
                 <Breadcrumb path={[{text:"用户管理",link:""}]}/>
                 <div style={{margin:20,marginTop:0}}>
-                    <Input style={{width:200,marginRight:50}} placeholder="账户名/邮箱/手机号"
+                    <Input style={{width:200,marginRight:50}} placeholder="账户名/姓名/邮箱/手机号"
                            onChange={this.handleSearchKeyChange}
                            onBlur={this.handleSearch} />
                     类型：<Select style={{width:200}} placeholder="选择类型"

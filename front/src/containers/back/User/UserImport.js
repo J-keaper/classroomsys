@@ -13,6 +13,10 @@ class UserImport extends React.Component{
             title: '账号',
             dataIndex:'account',
             key: 'account',
+        },{
+            title: '姓名',
+            dataIndex:'name',
+            key: 'name',
         }, {
             title: '邮箱',
             dataIndex:'email',
@@ -64,13 +68,15 @@ class UserImport extends React.Component{
                     let userData = [];
                     for(let index in studentData){
                         let row = studentData[index];
-                        userData.push({no:index,account:row[0].trim(),phone:row[1].trim(),
-                            email:row[2].trim(), type:{code:11,desc:"学生"}});
+                        userData.push({no:index,account:row[0].trim(),name:row[1].trim(),
+                            phone:row[2].trim(), email:row[3].trim(),
+                            type:{code:11,desc:"学生"}});
                     }
                     for(let index in teacherData){
                         let row = teacherData[index];
-                        userData.push({no:index,account:row[0].trim(),phone:row[1].trim(),
-                            email:row[2].trim(),type:{code:12,desc:"教师"}});
+                        userData.push({no:index,account:row[0].trim(),name:row[1].trim(),
+                            phone:row[2].trim(), email:row[3].trim(),
+                            type:{code:12,desc:"教师"}});
                     }
                     this.setState({data:userData});
                 };

@@ -17,7 +17,7 @@ class Apply extends  React.Component{
             title: '申请人',
             key: 'applicant',
             render:(text,record)=>(
-                record.applicant.account
+                record.applicant.account + " - " + record.applicant.name
             )
         }, {
             title: '申请时间',
@@ -54,7 +54,7 @@ class Apply extends  React.Component{
         };
     }
 
-    componentDidMount = async() => {
+    componentWillMount = async() => {
         if(this.props.applyStatus !== {}){
             this.props.getCommonConstant();
         }
