@@ -52,6 +52,7 @@ class AuditForm extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         const {auditApply} = this.props;
+        const isPending = auditApply && auditApply.status.code === 1;
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
@@ -85,50 +86,71 @@ class AuditForm extends React.Component {
                         label="申请教室容量">
                         <span>{auditApply && auditApply !== {} ? auditApply.capacity : ""}</span>
                     </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="审核结果">
-                        {getFieldDecorator('auditResult', {
-                            rules:[{
-                                required:true,
-                                message:"请选择审核结果！"
-                            }],
-                            initialValue: this.state.auditResult ? this.state.auditResult : "pass"
-                        })(
-                            <Radio.Group onChange={this.handleAuditResult}>
-                                <Radio.Button value="pass" >通过</Radio.Button>
-                                <Radio.Button value="deny" >拒绝</Radio.Button>
-                            </Radio.Group>
-                        )}
-                    </Form.Item>
-                    {this.state.auditResult === "pass" &&
-                    <Form.Item
-                        {...formItemLayout}
-                        label="审核教室">
-                        {getFieldDecorator('auditClassroom', {
-                            rules:[{
-                                required:true,
-                                message:"请输入审核教室！"
-                            }]
-                        })(
-                            <Input/>
-                        )}
-                    </Form.Item>
+                    {isPending ?
+                    <div>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="审核结果">
+                            {getFieldDecorator('auditResult', {
+                                rules:[{
+                                    required:true,
+                                    message:"请选择审核结果！"
+                                }],
+                                initialValue: this.state.auditResult ? this.state.auditResult : "pass"
+                            })(
+                                <Radio.Group onChange={this.handleAuditResult}>
+                                    <Radio.Button value="pass" >通过</Radio.Button>
+                                    <Radio.Button value="deny" >拒绝</Radio.Button>
+                                </Radio.Group>
+                            )}
+                        </Form.Item>
+                        {this.state.auditResult === "pass" &&
+                        <Form.Item
+                            {...formItemLayout}
+                            label="审核教室">
+                            {getFieldDecorator('auditClassroom', {
+                                rules:[{
+                                    required:true,
+                                    message:"请输入审核教室！"
+                                }]
+                            })(
+                                <Input/>
+                            )}
+                        </Form.Item>
+                        }
+                        <Form.Item
+                            {...formItemLayout}
+                            label="审核意见">
+                            {getFieldDecorator('auditOpinion', {
+                                rules:[{
+                                    required:true,
+                                    message:"请输入审核意见！"
+                                }]
+                            })(
+                                <TextArea rows={4} />
+                            )}
+                        </Form.Item>
+                    </div> :
+                    <div>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="审核结果">
+                            <span>{auditApply && auditApply !== {} ? auditApply.status.desc : ""}</span>
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="审核教室">
+                            <span>{auditApply && auditApply !== {} ? auditApply.classroom : ""}</span>
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="审核意见">
+                            <span>{auditApply && auditApply !== {} ? auditApply.auditResult : ""}</span>
+                        </Form.Item>
+                    </div>
                     }
-                    <Form.Item
-                        {...formItemLayout}
-                        label="审核意见">
-                        {getFieldDecorator('auditOpinion', {
-                            rules:[{
-                                required:true,
-                                message:"请输入审核意见！"
-                            }]
-                        })(
-                            <TextArea rows={4} />
-                        )}
-                    </Form.Item>
                     <Form.Item {...tailfFormItemLayout}>
-                        <Button type="primary" htmlType="submit">提交审核</Button>
+                        {isPending && <Button type="primary" htmlType="submit">提交审核</Button>}
                         <Button type="primary" htmlType="button" style={{marginLeft:10}}
                                 onClick={()=>{this.props.history.goBack()}}>返回</Button>
                     </Form.Item>

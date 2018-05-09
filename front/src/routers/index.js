@@ -9,6 +9,7 @@ import AdminClassroomImport from "../containers/back/Classroom/ClassroomImport";
 import AdminHelp from "../containers/back/Help";
 import AdminApplyAudit from '../containers/back/Audit';
 
+import Home from '../containers/front/Home';
 import Apply from '../containers/front/Apply';
 import Classroom from '../containers/front/Classroom';
 
@@ -33,6 +34,7 @@ export class FrontRouter extends React.Component{
     render(){
         return (
             <Switch>
+                <Route path="/home" component={Home}/>
                 <Route path="/apply" component={Apply}/>
                 <Route path="/classroom" component={Classroom}/>
             </Switch>

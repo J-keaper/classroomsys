@@ -1,9 +1,11 @@
 import React from 'react';
 import {Button, Card, Form, Input, Radio, InputNumber, DatePicker, message} from "antd";
 import API from "../../../api";
+import {bindActionCreators} from "redux";
+import {getCommonConstant} from "../../../redux/action";
+import {connect} from "react-redux";
 
 const FormItem = Form.Item;
-
 
 const formItemLayout = {
     labelCol: {
@@ -31,6 +33,13 @@ const tailFormItemLayout = {
 const { TextArea } = Input;
 
 class Apply extends React.Component{
+    constructor(){
+        super();
+    }
+
+    componentWillMount = () => {
+        this.props.getCommonConstant();
+    };
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -56,9 +65,9 @@ class Apply extends React.Component{
 
     render(){
         const { getFieldDecorator } = this.props.form;
-
+        const {applyPurpose} = this.props;
         return (
-            <Card style={{margin:20,background:"#f0f2f5"}} bordered={false}>
+            <Card style={{background:"#f0f2f5"}} bordered={false}>
                 <Form onSubmit={this.handleSubmit}>
                     <FormItem
                         {...formItemLayout}
@@ -70,8 +79,11 @@ class Apply extends React.Component{
                             }],
                         })(
                             <Radio.Group >
-                                <Radio.Button value="1" >讲课</Radio.Button>
-                                <Radio.Button value="2" >培训</Radio.Button>
+                                {applyPurpose &&
+                                    Object.values(applyPurpose).sort((a,b)=>b.code-a.code).map((v,i)=>(
+                                        <Radio.Button key={i} value={v.code} >{v.desc}</Radio.Button>
+                                    ))
+                                }
                             </Radio.Group>
                         )}
                     </FormItem>
@@ -140,4 +152,13 @@ class Apply extends React.Component{
         );
     }
 }
-export default Form.create()(Apply);
+
+const mapStateToProps = state => ({
+    applyPurpose:state.common.applyPurpose,
+});
+
+const mapDispatchToProps = dispatch => ({
+    getCommonConstant:bindActionCreators(getCommonConstant,dispatch),
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(Form.create()(Apply));

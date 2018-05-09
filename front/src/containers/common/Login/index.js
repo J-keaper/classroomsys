@@ -66,12 +66,11 @@ class Login extends React.Component {
         params.append("p",values.password);
 
         let res = await API.login(params);
-        console.log(res);
         if(res.code === 0){
             if(res.data.type.code <= 10){
-                this.props.history.push("/");
-            }else{
                 this.props.history.push("/admin/");
+            }else{
+                this.props.history.push("/");
             }
 
         }else{

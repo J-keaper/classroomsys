@@ -12,7 +12,7 @@ class FrontApp extends React.Component{
         return (
             <Layout style={{height:"100%"}}>
                 <HeadBar/>
-                <Content>
+                <Content style={{paddingTop:10}}>
                     <ContentRouter/>
                </Content>
                 <Footer/>

@@ -4,6 +4,7 @@ package com.keaper.classroom.web.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.keaper.classroom.common.JsonResult;
+import com.keaper.classroom.enums.ApplyPurpose;
 import com.keaper.classroom.enums.ApplyStatus;
 import com.keaper.classroom.enums.ClassroomStatus;
 import com.keaper.classroom.enums.UserType;
@@ -61,6 +62,17 @@ public class CommonController {
             ));
         }
         result.put("classroomStatus", classroomStatus);
+
+        JSONObject applyPurpose = new JSONObject();
+        for (final ApplyPurpose purpose : ApplyPurpose.values()) {
+            applyPurpose.put(purpose.name(), new JSONObject(
+                    new HashMap<String, Object>() {{
+                        put("code", purpose.getCode());
+                        put("desc", purpose .getDesc());
+                    }}
+            ));
+        }
+        result.put("applyPurpose", applyPurpose);
 
         result.put("campusList", classroomDao.getCampusList());
         result.put("buildingList", classroomDao.getBuildingList());
