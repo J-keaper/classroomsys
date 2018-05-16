@@ -6,7 +6,7 @@
  * sub：子菜单
  */
 export const menus = [
-    { key: '/admin/home', title: '首页', icon: 'mobile', },
+    { key: '/admin', title: '首页', icon: 'mobile', },
     {
         key: '/admin/apply', title: '教室申请', icon: 'copy',
         sub: [],

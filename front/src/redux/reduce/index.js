@@ -1,6 +1,6 @@
 import {
     FETCHING_DATA,
-    RECEIVED_APPLY_LIST, RECEIVED_AUDIT_APPLY, RECEIVED_CLASSROOM_LIST, RECEIVED_COMMON_TYPE,
+    RECEIVED_APPLY_LIST, RECEIVED_AUDIT_APPLY, RECEIVED_CLASSROOM_LIST, RECEIVED_COMMON_TYPE, RECEIVED_USER_INFO,
     RECEIVED_USER_LIST
 } from "../action/types";
 
@@ -19,6 +19,8 @@ const reducer = (state = initState, action) => {
     switch (action.type){
         case FETCHING_DATA:
             return {...state,common:{...state.common,fetching:action.fetching}};
+        case RECEIVED_USER_INFO:
+            return {...state,user:{...state.user,loginedUser:action.userInfo}};
         case RECEIVED_COMMON_TYPE:
             return {...state,common:{...state.common,...action.data}};
         case RECEIVED_USER_LIST:

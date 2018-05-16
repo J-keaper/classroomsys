@@ -1,7 +1,10 @@
 import React from 'react';
 import {Icon, Layout, Menu} from 'antd';
 import './index.less';
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
+import {getUserInfo} from "../../../redux/action";
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
 
 const {Header} = Layout;
 const SubMenu = Menu.SubMenu;
@@ -10,13 +13,21 @@ const MenuItemGroup = Menu.ItemGroup;
 class HeadBar extends React.Component{
     constructor(){
         super();
-        this.state={
-            logined:false,
+    }
+
+    componentWillMount(){
+        if(!!localStorage.getItem("token")){
+            this.props.getUserInfo();
         }
     }
 
+    handleLogout = () => {
+        localStorage.removeItem("token");
+        this.props.history.push("/login");
+    };
 
     render(){
+        const {userInfo} = this.props;
         return (
             <Header className="header-container">
                 <div className="logo"></div>
@@ -27,14 +38,14 @@ class HeadBar extends React.Component{
                     <Menu.Item key="2">
                         <Link to="/classroom">教室查询</Link>
                     </Menu.Item>
-                    {this.state.logined ? (
+                    {!!localStorage.getItem('token') ? (
                         <SubMenu style={{float:"right"}} title={
                             <div>
                                 <Icon type="user" />
-                                <span>Keaper</span>
+                                <span>{userInfo ? userInfo.name : ""}</span>
                             </div>}>
                             <Menu.Item key="user-center"><span >用户中心</span></Menu.Item>
-                            <Menu.Item key="logout"><span >退出登录</span></Menu.Item>
+                            <Menu.Item key="logout" ><span onClick={this.handleLogout}>退出登录</span></Menu.Item>
                         </SubMenu>
                     ) : (
                         <Menu.Item key="3" style={{float:"right"}}>
@@ -47,4 +58,11 @@ class HeadBar extends React.Component{
     }
 }
 
-export default HeadBar;
+const mapStateToProps = state => ({
+    userInfo:state.user.loginedUser
+});
+
+const mapDispatchToProps = dispatch => ({
+    getUserInfo:bindActionCreators(getUserInfo,dispatch)
+});
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(HeadBar));

@@ -139,6 +139,12 @@ class AuditForm extends React.Component {
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
+                            label="审核人">
+                            <span>{auditApply && auditApply !== {} ?
+                                auditApply.auditor.account + " - " + auditApply.auditor.name : ""}</span>
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
                             label="审核教室">
                             <span>{auditApply && auditApply !== {} ? auditApply.classroom : ""}</span>
                         </Form.Item>

@@ -2,20 +2,24 @@ package com.keaper.classroom.web.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.keaper.classroom.annotation.TokenValidate;
 import com.keaper.classroom.common.JsonResult;
 import com.keaper.classroom.enums.ApplyStatus;
 import com.keaper.classroom.modal.ApplyInfo;
 import com.keaper.classroom.modal.filter.ApplyFilter;
 import com.keaper.classroom.service.ApplyService;
+import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 
 @Controller
 @RequestMapping("api/apply")
+@TokenValidate
 public class ApplyController {
 
     @Resource
@@ -51,13 +55,14 @@ public class ApplyController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST,path = "add")
-    public JsonResult addApply(@RequestParam("aid") String applicantId,
+    public JsonResult addApply(HttpServletRequest request,
                                @RequestParam("ap") String applyPurpose,
                                @RequestParam("ar") String applyReason,
                                @RequestParam("ac") String applyCapacity,
                                @RequestParam("st") String startTime,
                                @RequestParam("et")String endTime) throws ParseException {
-        boolean result = applyService.addApply(Long.valueOf(applicantId),
+        long applicantId =  Long.valueOf((String) ((Claims)request.getAttribute("claims")).get("id"));
+        boolean result = applyService.addApply(applicantId,
                 Integer.valueOf(applyPurpose), applyReason,
                 Integer.valueOf(applyCapacity), startTime,endTime);
         if(!result){
@@ -69,12 +74,13 @@ public class ApplyController {
 
     @ResponseBody
     @RequestMapping("audit")
-    public JsonResult audit(@RequestParam("id") String id,
-                            @RequestParam("aid") String auditorId,
+    public JsonResult audit(HttpServletRequest request,
+                            @RequestParam("id") String id,
                             @RequestParam("pass") boolean pass,
                             @RequestParam("opi") String opinion,
                             @RequestParam(value = "cla",required = false)String classroom){
-        boolean result = applyService.auditApply(Long.valueOf(id),Long.valueOf(auditorId),
+        long auditorId = Long.valueOf((String) ((Claims)request.getAttribute("claims")).get("id"));
+        boolean result = applyService.auditApply(Long.valueOf(id),auditorId,
                 pass,opinion,classroom);
         if(!result){
             JsonResult.getErrorResult(JsonResult.Result.ERROR,"发生错误！");

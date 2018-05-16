@@ -13,6 +13,7 @@
 
     <mvc:interceptors>
         <bean class="com.keaper.classroom.interceptor.SystemLogInterceptor"/>
+        <bean class="com.keaper.classroom.interceptor.TokenInterceptor"/>
     </mvc:interceptors>
 
     <bean class="com.keaper.classroom.ExceptionResolver"/>

@@ -1,8 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
-import { Form, Icon, Input, Button, message } from 'antd';
+import {Button, Form, Icon, Input, message} from 'antd';
 import './index.less';
-import '../../../exart/nc';
 import API from "../../../api";
 
 const FormItem = Form.Item;
@@ -37,7 +36,7 @@ class Login extends React.Component {
             customWidth: 240,
             callback: this.validateCallBack,
         };
-        let nc = new noCaptcha(NC_Opt)
+        let nc = new noCaptcha(NC_Opt);
 
         nc.upLang('cn', {
             _startTEXT: "请按住滑块，拖动到最右边",
@@ -67,14 +66,15 @@ class Login extends React.Component {
 
         let res = await API.login(params);
         if(res.code === 0){
-            if(res.data.type.code <= 10){
+            localStorage.setItem("token",res.data.token);
+            if(res.data.user.type.code <= 10){
                 this.props.history.push("/admin/");
             }else{
                 this.props.history.push("/");
             }
-
         }else{
             message.error(res.data);
+            this.initValidation(); //失败需要重新加载验证
         }
     };
 
@@ -101,7 +101,8 @@ class Login extends React.Component {
                         <div id="captcha" className="nc-container"/>
                         <FormItem>
                             <a className="login-form-forgot" href="" style={{float: 'right'}}>忘记密码</a>
-                            <Button type="primary" htmlType="submit" disabled={!this.state.canSubmit}
+                            <Button type="primary" htmlType="submit"
+                                    disabled={!this.state.canSubmit}
                                     className="login-form-button" style={{width: '100%'}}>
                                 登录
                             </Button>

@@ -59,7 +59,7 @@ class User extends React.Component{
         }
     }
 
-    componentDidMount = async() => {
+    componentWillMount = async() => {
         if(this.props.userType !== {}){
             this.props.getCommonConstant();
         }

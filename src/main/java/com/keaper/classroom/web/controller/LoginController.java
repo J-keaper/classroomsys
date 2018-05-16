@@ -1,9 +1,11 @@
 package com.keaper.classroom.web.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.keaper.classroom.service.UserService;
 import com.keaper.classroom.common.JsonResult;
 import com.keaper.classroom.modal.User;
 import com.keaper.classroom.utils.CaptchaUtil;
+import com.keaper.classroom.utils.TokenUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/api/user")
@@ -49,6 +52,9 @@ public class LoginController {
                     JsonResult.Result.LOGIN_PASSWORD_WRONG,
                     JsonResult.Result.LOGIN_PASSWORD_WRONG.getText());
         }
-        return JsonResult.getCorrectResult(user);
+        JSONObject result = new JSONObject();
+        result.put("user",user);
+        result.put("token", TokenUtil.generateToken(user));
+        return JsonResult.getCorrectResult(result);
     }
 }

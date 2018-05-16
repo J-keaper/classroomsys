@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class ApplyService {
@@ -63,8 +64,8 @@ public class ApplyService {
     public boolean addApply(long applicantId,int applyPurpose, String applyReason,
                             int applyCapacity,String startTime, String endTime) throws ParseException {
         return applyDao.addApply(applicantId,applyPurpose,applyReason, applyCapacity,
-                DateUtils.parseDate(startTime,"YYYY-MM-DD HH:mm"),
-                DateUtils.parseDate(endTime,"YYYY-MM-DD HH:mm"),
+                DateUtils.parseDate(startTime,"yyyy-MM-dd HH:mm"),
+                DateUtils.parseDate(endTime,"yyyy-MM-dd HH:mm"),
                 ApplyStatus.PENDING.getCode()) > 0;
 
     }

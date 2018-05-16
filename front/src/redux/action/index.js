@@ -1,10 +1,20 @@
 import {
     FETCHING_DATA, RECEIVED_APPLY_LIST, RECEIVED_AUDIT_APPLY, RECEIVED_CLASSROOM_LIST, RECEIVED_COMMON_TYPE,
+    RECEIVED_USER_INFO,
     RECEIVED_USER_LIST,
 } from "./types";
 import API from '../../api';
 
 const defaultPageSize = 20;
+
+export function getUserInfo() {
+    return async (dispatch) => {
+        dispatch(fetchingData(true));
+        let result = await API.getUserInfo();
+        dispatch(receivedUserInfo(result.ret ? result.data : {}));
+        dispatch(fetchingData(false));
+    };
+}
 
 export function getCommonConstant() {
     return async (dispatch) => {
@@ -70,6 +80,11 @@ export function getAuditApply(id) {
 const fetchingData = (fetching) => ({
     type:FETCHING_DATA,
     fetching
+});
+
+const receivedUserInfo = (userInfo) => ({
+    type:RECEIVED_USER_INFO,
+    userInfo
 });
 
 const receivedCommonType = (data) => ({

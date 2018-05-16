@@ -1,10 +1,13 @@
 package com.keaper.classroom.web.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.keaper.classroom.annotation.TokenValidate;
 import com.keaper.classroom.common.JsonResult;
 import com.keaper.classroom.enums.UserType;
+import com.keaper.classroom.modal.User;
 import com.keaper.classroom.modal.filter.UserFilter;
 import com.keaper.classroom.service.UserService;
+import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,16 +18,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/api/user")
+@TokenValidate
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 
     @Resource
     private UserService userService;
+
+
+    /**
+     * 获取当前登录用户信息
+     * @param request
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET,path = "info")
+    @ResponseBody
+    public JsonResult getCurrentUserInfo(HttpServletRequest request){
+        Claims claims = (Claims) request.getAttribute("claims");
+        String account = (String) claims.get("account");
+        User user = userService.getUserInfoByAccount(account);
+        return JsonResult.getCorrectResult(user);
+    }
 
 
     @RequestMapping(method = RequestMethod.GET,path = "list")

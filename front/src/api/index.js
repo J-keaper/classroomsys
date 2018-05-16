@@ -1,8 +1,12 @@
-import axios from "axios/index";
+import axios from "../axios";
 
 class API {
     static async login(params){
         return await API.post("/api/user/login",params);
+    }
+
+    static async getUserInfo(){
+        return await API.get("/api/user/info");
     }
 
     static async getCommonConstant(){
@@ -61,7 +65,6 @@ class API {
     static async submitAudit(id,result,opinion,classroom){
         let params = new URLSearchParams();
         params.append("id",id);
-        params.append("aid","1");//TODO
         params.append("pass",result === "pass");
         params.append("opi",opinion);
         if(classroom && classroom !== ""){
@@ -72,7 +75,6 @@ class API {
 
     static async submitApply(applyPurpose,applyReason,applyCapacity,startTime,endTime){
         let params = new URLSearchParams();
-        params.append("aid","1");//TODO
         params.append("ap",applyPurpose);
         params.append("ar",applyReason);
         params.append("ac",applyCapacity);
@@ -114,7 +116,6 @@ class API {
         }
         return {};
     }
-
 
 }
 
