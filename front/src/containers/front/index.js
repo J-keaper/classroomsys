@@ -6,6 +6,8 @@ import Apply from "./Apply";
 import Home from "./Home";
 import Classroom from "./Classroom";
 import {Redirect, Route, Switch} from "react-router-dom";
+import UserCenter from "./UserCenter";
+import ForgetPassword from "../common/ForgetPassword";
 
 const {Content} = Layout;
 
@@ -26,6 +28,8 @@ class FrontApp extends React.Component{
                         <Route path="/apply" render={ () => (isLogined() ?
                             <Apply/> : <Redirect to="/login"/>)}/>
                         <Route path="/classroom"  component={Classroom}/>
+                        <Route path="/user" component={UserCenter}/>
+                        <Route path="/pass" component={ForgetPassword}/>
                     </Switch>
                     </Content>
                 <Footer/>

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon, Layout, Menu} from 'antd';
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {getUserInfo} from "../../../redux/action";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
@@ -38,6 +38,9 @@ class HeadBar extends React.Component{
                             <Icon type="user" />
                             <span>{userInfo ? userInfo.name : ""}</span>
                         </div>}>
+                        <Menu.Item key="front" >
+                            <Link to={"/"}>返回前台</Link>
+                        </Menu.Item>
                         <Menu.Item key="logout" >
                             <span onClick={this.handleLogout}>退出登录</span>
                         </Menu.Item>

@@ -7,6 +7,21 @@ class API {
 
     static async getUserInfo(){
         return await API.get("/api/user/info");
+}
+
+    static async getUserApply(){
+        return await API.get("/api/user/apply");
+    }
+
+    static  async forgetPassword(email){
+        return await API.get("/api/user/password/forget",{e:email});
+    }
+
+    static async resetPassword(token,password){
+        let params = new URLSearchParams();
+        params.append("t",token);
+        params.append("p",password);
+        return await API.post("/api/user/password/reset",params);
     }
 
     static async getCommonConstant(){
@@ -18,12 +33,21 @@ class API {
             {sk:searchKey,st:searchType,pc:pageCount,ps:pageSize});
     }
 
-    static async updateUserInfo(account,phone,email){
+    static async updateUserInfo(phone,email,account){
         let params = new URLSearchParams();
-        params.append("a",account);
         params.append("p",phone);
         params.append("e",email);
+        if(account !== undefined){
+            params.append("a",account);
+        }
         return await API.post("/api/user/update",params);
+    }
+
+    static async updatePasswordByOld(oldPassword,newPassword){
+        let params = new URLSearchParams();
+        params.append("op",oldPassword);
+        params.append("np",newPassword);
+        return await API.post("/api/user/update/password",params);
     }
 
     static async updateUserPassword(account,password){

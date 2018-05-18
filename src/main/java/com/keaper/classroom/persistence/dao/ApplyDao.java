@@ -15,6 +15,8 @@ public interface ApplyDao {
                              @Param("offset") int offset,
                              @Param("limit") int limit);
 
+    List<Apply> getApplyByUser(@Param("applicantId") long applicantId);
+
     int countApplyList(@Param("applicant") String applicant,
                        @Param("status") Integer status);
 

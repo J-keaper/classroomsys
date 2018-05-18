@@ -6,6 +6,7 @@
 
     <!--读取properties文件-->
     <context:property-placeholder location="classpath:db.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:mail.properties" ignore-unresolvable="true"/>
 
 
 

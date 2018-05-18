@@ -1,6 +1,6 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
-import {Button, Form, Icon, Input, message} from 'antd';
+import {Link, withRouter} from 'react-router-dom';
+import {Button, Form, Icon, Input, message, Spin} from 'antd';
 import './index.less';
 import API from "../../../api";
 
@@ -8,23 +8,24 @@ const FormItem = Form.Item;
 
 class Login extends React.Component {
 
-    constructor(){
+    constructor() {
         super();
         this.state = {
-            canSubmit:false,
-            csessionid:"",
-            sig:"",
-            token:"",
-            scene:"nc_login",
+            canSubmit: false,
+            csessionid: "",
+            sig: "",
+            token: "",
+            scene: "nc_login",
+            loading: false
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.initValidation();
     }
 
     validateCallBack = (data) => {
-        this.setState({canSubmit:true,csessionid:data.csessionid, sig:data.sig, token:data.token});
+        this.setState({canSubmit: true, csessionid: data.csessionid, sig: data.sig, token: data.token});
     };
 
     initValidation = () => {
@@ -57,59 +58,65 @@ class Login extends React.Component {
 
     submit = async (values) => {
         let params = new URLSearchParams();
-        params.append("csessionid",this.state.csessionid);
-        params.append("sig",this.state.sig);
-        params.append("token",this.state.token);
-        params.append("scene",this.state.scene);
-        params.append("a",values.account);
-        params.append("p",values.password);
+        params.append("csessionid", this.state.csessionid);
+        params.append("sig", this.state.sig);
+        params.append("token", this.state.token);
+        params.append("scene", this.state.scene);
+        params.append("a", values.account);
+        params.append("p", values.password);
 
+        this.setState({loading: true});
         let res = await API.login(params);
-        if(res.code === 0){
-            localStorage.setItem("token",res.data.token);
-            if(res.data.user.type.code <= 10){
+        this.setState({loading: false});
+        if (res.code === 0) {
+            localStorage.setItem("token", res.data.token);
+            if (res.data.user.type.code <= 10) {
                 this.props.history.push("/admin/");
-            }else{
+            } else {
                 this.props.history.push("/");
             }
-        }else{
+        } else {
             message.error(res.data);
             this.initValidation(); //失败需要重新加载验证
         }
     };
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const {getFieldDecorator} = this.props.form;
         return (
             <div className="login">
-                <div className="login-form" >
-                    <Form style={{maxWidth: '300px'}} onSubmit={this.handleSubmit}>
-                        <FormItem>
-                            {getFieldDecorator('account', {
-                                rules: [{ required: true, message: '请输入用户名!' }],
-                            })(
-                                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />} placeholder="用户名" />
-                            )}
-                        </FormItem>
-                        <FormItem>
-                            {getFieldDecorator('password', {
-                                rules: [{ required: true, message: '请输入密码!' }],
-                            })(
-                                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />} type="password" placeholder="密码" />
-                            )}
-                        </FormItem>
-                        <div id="captcha" className="nc-container"/>
-                        <FormItem>
-                            <a className="login-form-forgot" href="" style={{float: 'right'}}>忘记密码</a>
-                            <Button type="primary" htmlType="submit"
-                                    disabled={!this.state.canSubmit}
-                                    className="login-form-button" style={{width: '100%'}}>
-                                登录
-                            </Button>
-                        </FormItem>
-                    </Form>
-                </div>
+                <Spin spinning={this.state.loading} tip={"登录中..."}>
+                    <div className="login-form">
+                        <Form style={{maxWidth: '300px'}} onSubmit={this.handleSubmit}>
+                            <FormItem>
+                                {getFieldDecorator('account', {
+                                    rules: [{required: true, message: '请输入用户名!'}],
+                                })(
+                                    <Input prefix={<Icon type="user" style={{fontSize: 13}}/>} placeholder="用户名"/>
+                                )}
+                            </FormItem>
+                            <FormItem>
+                                {getFieldDecorator('password', {
+                                    rules: [{required: true, message: '请输入密码!'}],
+                                })(
+                                    <Input prefix={<Icon type="lock" style={{fontSize: 13}}/>} type="password"
+                                           placeholder="密码"/>
+                                )}
+                            </FormItem>
+                            <div id="captcha" className="nc-container"/>
+                            <FormItem>
+                                <Link style={{float: 'right'}} to={"/pass/forget"}>忘记密码</Link>
+                                <Button type="primary" htmlType="submit"
+                                        disabled={!this.state.canSubmit}
+                                        className="login-form-button" style={{width: '100%'}}>
+                                    登录
+                                </Button>
+                            </FormItem>
+                        </Form>
+                    </div>
+                </Spin>
             </div>
+
 
         );
     }

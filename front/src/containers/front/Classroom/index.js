@@ -90,7 +90,7 @@ class Classroom extends React.Component{
         const {classroomStatus,classroomList,campusList,buildingList,loading} = this.props;
         return(
             <Card style={{background:"#f0f2f5"}} bordered={false}>
-                <div style={{margin:20,marginTop:0}}>
+                <div style={{margin:60,marginTop:0,marginBottom:0}}>
                     校区：<Select style={{width:150,marginRight:50}} placeholder="选择校区"
                                optionFilterProp="children" defaultValue={""}
                                onChange={this.handleSearchCampusChange}>
@@ -128,7 +128,7 @@ class Classroom extends React.Component{
                            onChange={this.handleSearchNumberChange}
                            onBlur={this.handleSearch} />
                 </div>
-                <Table style={{margin:20,marginTop:0}} columns={this.columns} rowKey={"id"}
+                <Table style={{margin:60,marginTop:15,marginBottom:0}} columns={this.columns} rowKey={"id"}
                        dataSource={classroomList !== undefined ? classroomList : []}
                        pagination={this.state.pagination}
                        loading={!!loading}

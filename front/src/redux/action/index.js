@@ -1,5 +1,6 @@
 import {
     FETCHING_DATA, RECEIVED_APPLY_LIST, RECEIVED_AUDIT_APPLY, RECEIVED_CLASSROOM_LIST, RECEIVED_COMMON_TYPE,
+    RECEIVED_USER_APPLY,
     RECEIVED_USER_INFO,
     RECEIVED_USER_LIST,
 } from "./types";
@@ -77,6 +78,16 @@ export function getAuditApply(id) {
     }
 }
 
+
+export function getUserApply() {
+    return async (dispatch)=>{
+        dispatch(fetchingData(true));
+        let result = await API.getUserApply();
+        dispatch(receivedUserApply(result.ret ? result.data : {}));
+        dispatch(fetchingData(false));
+    }
+}
+
 const fetchingData = (fetching) => ({
     type:FETCHING_DATA,
     fetching
@@ -85,6 +96,11 @@ const fetchingData = (fetching) => ({
 const receivedUserInfo = (userInfo) => ({
     type:RECEIVED_USER_INFO,
     userInfo
+});
+
+const receivedUserApply = (userApply) => ({
+    type:RECEIVED_USER_APPLY,
+    userApply
 });
 
 const receivedCommonType = (data) => ({

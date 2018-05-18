@@ -52,6 +52,15 @@ public class ApplyService {
         });
     }
 
+    public List<ApplyInfo> getApplyListByUser(long userId){
+        List<Apply> applyList = applyDao.getApplyByUser(userId);
+        return Lists.transform(applyList, new Function<Apply, ApplyInfo>() {
+            public ApplyInfo apply(Apply apply) {
+                return apply2ApplyInfo(apply);
+            }
+        });
+    }
+
     public int getApplyCount(ApplyFilter filter){
         return applyDao.countApplyList(filter.getApplicant(),
                 filter.getApplyStatus() == null ? null : filter.getApplyStatus().getCode());

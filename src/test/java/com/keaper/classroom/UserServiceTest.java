@@ -22,7 +22,7 @@ public class UserServiceTest extends SpringBaseTest{
 
     @Test
     public void validatePassword() {
-        userService.validatePassword("1407084125","1407084125","");
+        System.out.println(userService.validatePassword("1407084101","1407084102","a707705ae50dfbd912f0ad2378c7da2344370c99e9e0436c40398f12d87726594b851130d5b1088e96eceadc78df9a8c5f358a584fd45fb2081759f3f156e297"));
     }
 
     @Test

@@ -11,14 +11,17 @@ import com.keaper.classroom.modal.User;
 import com.keaper.classroom.modal.filter.UserFilter;
 import com.keaper.classroom.persistence.dao.UserDao;
 import com.keaper.classroom.utils.EncryptUtil;
+import com.keaper.classroom.utils.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
 public class UserService {
+
 
     @Resource
     private UserDao userDao;
@@ -28,6 +31,18 @@ public class UserService {
         return userDao.selectUserByAccount(account);
     }
 
+    public User selectUserByEmail(String email){
+        return userDao.selectUserByEmail(email);
+    }
+    public String buildResetPasswordUrl(HttpServletRequest request,User user){
+        if(user == null){
+            return null;
+        }
+        String token = TokenUtil.generateToken(user);
+        String host = "http://" + request.getServerName() + ":" +
+                request.getServerPort();
+        return host + "/pass/reset?t=" + token;
+    }
 
     /**
      * validate password
@@ -95,12 +110,22 @@ public class UserService {
     }
 
 
-
-
     public boolean updateUser(String account, String phone, String email, String password){
         return userDao.updateUser(account,phone,email,
                 StringUtils.isEmpty(password) ? null :
                         EncryptUtil.EncryptPassword(account,password)) > 0;
+    }
+
+    public boolean weatherWaitReset(String account){
+        return userDao.getWaitPassword(account) == 1;
+    }
+
+    public boolean setWaitReset(String account){
+        return userDao.setWaitPassword(account,1) > 0;
+    }
+
+    public boolean clearWaitReset(String account){
+        return userDao.setWaitPassword(account,0) > 0;
     }
 
 }

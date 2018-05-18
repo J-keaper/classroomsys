@@ -12,6 +12,8 @@ public interface UserDao {
 
     User selectUserByAccount(@Param("account") String account);
 
+    User selectUserByEmail(@Param("email") String email);
+
     User selectUserById(@Param("id") long id);
 
     /**
@@ -36,4 +38,15 @@ public interface UserDao {
      */
     int updateUser(@Param("account")String account,@Param("phone")String phone,
                    @Param("email") String email,@Param("password")String password);
+
+
+    /**
+     * 设置重置密码标志位
+     * @param account
+     * @return
+     */
+    int setWaitPassword(@Param("account") String account,@Param("flag")int flag);
+
+    int getWaitPassword(@Param("account") String account);
+
 }

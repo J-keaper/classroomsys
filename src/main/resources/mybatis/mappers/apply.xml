@@ -41,7 +41,10 @@
             <if test="applicant != null">
                 (u.account LIKE CONCAT(CONCAT('%', #{applicant}), '%')
                 OR
-                u.name LIKE CONCAT(CONCAT('%', #{applicant}), '%'))
+                u.name LIKE CONCAT(CONCAT('%', #{applicant}), '%')
+                OR
+                u.id = #{applicant}
+                )
             </if>
             <if test="status != null">
                 AND a.status = #{status}
@@ -59,12 +62,39 @@
         apply a LEFT JOIN user u ON a.applicant_id = u.id
         <where>
             <if test="applicant != null">
-                u.account LIKE CONCAT(CONCAT('%', #{applicant}), '%')
+                (u.account LIKE CONCAT(CONCAT('%', #{applicant}), '%')
+                OR
+                u.name LIKE CONCAT(CONCAT('%', #{applicant}), '%')
+                OR
+                u.id = #{applicant}
+                )
             </if>
             <if test="status != null">
                 AND a.status = #{status}
             </if>
         </where>
+    </select>
+
+    <select id="getApplyByUser" resultMap="applyMap">
+        SELECT
+          a.id,
+          a.applicant_id,
+          a.apply_purpose,
+          a.apply_reason,
+          a.capacity,
+          a.start_time,
+          a.end_time,
+          a.create_time,
+          a.status,
+          a.auditor_id,
+          a.audit_time,
+          a.audit_result,
+          a.classroom
+        FROM
+          apply a
+        WHERE
+          a.applicant_id = #{applicantId}
+        ORDER BY a.create_time DESC
     </select>
 
     <select id="getApplyById" resultMap="applyMap">

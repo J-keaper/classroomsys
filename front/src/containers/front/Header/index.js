@@ -44,7 +44,14 @@ class HeadBar extends React.Component{
                                 <Icon type="user" />
                                 <span>{userInfo ? userInfo.name : ""}</span>
                             </div>}>
-                            <Menu.Item key="user-center"><span >用户中心</span></Menu.Item>
+                            <Menu.Item key="user-center">
+                                <Link to={"/user/apply"}>个人中心</Link>
+                            </Menu.Item>
+                            {userInfo && userInfo.type.code <= 10 &&
+                                <Menu.Item key="admin">
+                                    <Link to={"/admin"}>管理后台</Link>
+                                </Menu.Item>
+                            }
                             <Menu.Item key="logout" ><span onClick={this.handleLogout}>退出登录</span></Menu.Item>
                         </SubMenu>
                     ) : (

@@ -94,7 +94,7 @@ class User extends React.Component{
     };
 
     submitEdit = async (user) => {
-        let result = await API.updateUserInfo(user.account,user.phone,user.email);
+        let result = await API.updateUserInfo(user.phone,user.email,user.account);
         if(result.ret){
             message.success("更新成功！");
         }else{

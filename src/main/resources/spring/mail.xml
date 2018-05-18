@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="templateResolver" class="org.thymeleaf.templateresolver.ClassLoaderTemplateResolver">
+        <property name="prefix" value="/templates/"/>
+        <property name="suffix" value=".html"/>
+        <property name="templateMode" value="HTML"/>
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>
+
+    <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver"/>
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/>
+        <property name="username" value="${mail.username}"/>
+        <property name="password" value="${mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtps.auth">${mail.smtps.auth}</prop>
+                <prop key="mail.smtp.ssl.enable">${mail.smtp.ssl.enable}</prop>
+                <prop key="mail.transport.protocol">${mail.transport.protocol}</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

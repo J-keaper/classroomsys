@@ -32,6 +32,24 @@
         account = #{account}
     </select>
 
+    <select id="selectUserByEmail" resultMap="userMap">
+      SELECT
+        id,
+        type,
+        name,
+        account,
+        phone,
+        password,
+        email,
+        register_time,
+        update_time
+      FROM
+        user
+      WHERE
+        email = #{email}
+      LIMIT 1
+    </select>
+
     <select id="selectUserById" resultMap="userMap">
         SELECT
         id,
@@ -151,5 +169,23 @@
         WHERE
             account = #{account}
     </update>
+
+    <update id="setWaitPassword">
+        UPDATE user
+        SET
+          wait_reset = #{flag}
+        WHERE
+          account = #{account}
+    </update>
+
+    <select id="getWaitPassword" resultType="java.lang.Integer">
+        SELECT
+          wait_reset
+        FROM
+          user
+        WHERE
+          account = #{account}
+    </select>
+
 
 </mapper>

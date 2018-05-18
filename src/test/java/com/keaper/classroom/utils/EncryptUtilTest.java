@@ -8,6 +8,6 @@ public class EncryptUtilTest {
 
     @Test
     public void encryptPassword() {
-        System.out.println(EncryptUtil.EncryptPassword("admin","admin"));
+        System.out.println(EncryptUtil.EncryptPassword("1407084101","1407084101"));
     }
 }
