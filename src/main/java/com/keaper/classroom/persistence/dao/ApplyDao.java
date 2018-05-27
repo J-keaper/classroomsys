@@ -35,4 +35,16 @@ public interface ApplyDao {
                         @Param("status") int status,
                         @Param("result") String result,
                         @Param("classroom") String classroom);
+
+    List<Apply> getOverdueApply();
+
+    int updateStatus(@Param("id")long id,@Param("status")int status);
+
+    /**
+     * 获取教室当前活动详情
+     * @param classroom
+     * @return
+     */
+    Apply getApplyByClassroom(@Param("classroom") String classroom);
+
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Upload, Icon, Table, Button, message, Row, Col} from "antd";
+import {Upload, Icon, Table, Button, message, Row, Col, Spin} from "antd";
 import Breadcrumb from "../../../components/Breadcrumb/index";
 import XLSX from 'xlsx';
 import API from "../../../api";
@@ -35,6 +35,7 @@ class UserImport extends React.Component{
 
         this.state = {
             data: [],
+            loading:false
         };
     }
 
@@ -42,7 +43,9 @@ class UserImport extends React.Component{
         if(this.state.data === []){
             message.error("数据为空！");
         }
+        this.setState({loading:true});
         let result = await API.importUserList(this.state.data);
+        this.setState({loading:false});
         if(result.ret){
             this.setState({data:[]});
             message.success("导入成功！");
@@ -62,8 +65,10 @@ class UserImport extends React.Component{
 
                     const studentWs = wb.Sheets["学生"];
                     const teacherWs = wb.Sheets["教师"];
+                    const adminWs = wb.Sheets["管理员"];
                     let studentData = XLSX.utils.sheet_to_json(studentWs, {header:1}).slice(1);
                     let teacherData = XLSX.utils.sheet_to_json(teacherWs, {header:1}).slice(1);
+                    let adminData = XLSX.utils.sheet_to_json(adminWs, {header:1}).slice(1);
 
                     let userData = [];
                     for(let index in studentData){
@@ -77,6 +82,12 @@ class UserImport extends React.Component{
                         userData.push({no:index,account:row[0].trim(),name:row[1].trim(),
                             phone:row[2].trim(), email:row[3].trim(),
                             type:{code:12,desc:"教师"}});
+                    }
+                    for(let index in adminData){
+                        let row = adminData[index];
+                        userData.push({no:index,account:row[0].trim(),name:row[1].trim(),
+                            phone:row[2].trim(), email:row[3].trim(),
+                            type:{code:1,desc:"管理员"}});
                     }
                     this.setState({data:userData});
                 };
@@ -106,12 +117,14 @@ class UserImport extends React.Component{
                             <h4 style={{textAlign:"right"}}><a href="/file/用户信息模板文件.xlsx">点击下载模板文件</a></h4>
                         </Col>
                     </Row>
+                    <Spin spinning={this.state.loading} tip={"导入中..."}>
+                        <Table style={{marginTop:5,marginBottom:10}} columns={this.columns}
+                               rowKey="no" dataSource={this.state.data}/>
+                        <Button style={{marginLeft:"45%"}} type={"primary"}
+                                onClick={this.handleImport}
+                        >导入</Button>
+                    </Spin>
 
-                    <Table style={{marginTop:5,marginBottom:10}} columns={this.columns}
-                           rowKey="no" dataSource={this.state.data}/>
-                    <Button style={{marginLeft:"45%"}} type={"primary"}
-                        onClick={this.handleImport}
-                    >导入</Button>
                 </div>
             </div>
         );

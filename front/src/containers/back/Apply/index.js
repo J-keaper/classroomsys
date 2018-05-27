@@ -23,7 +23,6 @@ class Apply extends  React.Component{
             title: '申请时间',
             key: 'applyTime',
             render:(text,record)=>{
-                console.log(record.createTime);
                 return (moment(record.createTime).format("YYYY-MM-DD HH:mm"));
             }
         }, {

@@ -1,13 +1,25 @@
 import React from 'react';
 import Breadcrumb from "../../../components/Breadcrumb/index";
-import {Input, Select, Table} from "antd";
+import {Button, Input, message, Modal, Popover, Select, Table} from "antd";
 import {bindActionCreators} from "redux";
 
 import {connect} from "react-redux";
 import {getClassroomList, getCommonConstant} from "../../../redux/action";
+import API from "../../../api";
+import OpenForm from "./OpenForm";
+import moment from "moment/moment";
 
 const Option = Select.Option;
 
+
+const formItemLayout = {
+    labelCol: {
+        span:8
+    },
+    wrapperCol: {
+        span:16
+    },
+};
 
 class Classroom extends React.Component{
 
@@ -33,15 +45,16 @@ class Classroom extends React.Component{
             title:"状态",
             key:"status",
             render:(text,record) => (
-                record.status.desc
-            )
-        },{
-            title: '操作',
-            key: 'operation',
-            render:(text,record)=>(
-                <div>
-
-                </div>
+                record.status.code === 4 && record.apply != null ?
+                    <Popover content={<div>
+                        活动详情：{record.apply.applyPurpose.desc + " - " + record.apply.applyReason}
+                        <br/>
+                        活动时间：{moment(record.apply.startTime).format("YYYY-MM-DD HH:mm") +
+                    " 至 " + moment(record.apply.endTime).format("YYYY-MM-DD HH:mm")}
+                    </div>}>
+                        <a>{record.status.desc}</a>
+                    </Popover>
+                    : record.status.desc
             )
         }];
 
@@ -52,7 +65,9 @@ class Classroom extends React.Component{
             searchCampus:"",
             searchBuilding:"",
             searchStatus:-1,
-            searchNumber:""
+            searchNumber:"",
+            selectedRowKeys: [],
+            openModalVisible:false
         }
     }
 
@@ -71,23 +86,24 @@ class Classroom extends React.Component{
     };
 
     handleSearchCampusChange = (v) => {
-        this.setState({searchCampus:v},this.handleSearch);
+        this.setState({selectedRowKeys:[],searchCampus:v},this.handleSearch);
     };
 
     handleSearchBuildingChange = (v) => {
-        this.setState({searchBuilding:v},this.handleSearch);
+        this.setState({selectedRowKeys:[],searchBuilding:v},this.handleSearch);
     };
 
     handleSearchStatusChange = (v) => {
-        this.setState({searchStatus:v},this.handleSearch);
+        this.setState({selectedRowKeys:[],searchStatus:v},this.handleSearch);
     };
 
     handleSearchNumberChange = (e) => {
-        this.setState({searchNumber:e.target.value});
+        if(e.target.value !== this.state.searchNumber){
+            this.setState({selectedRowKeys:[],searchNumber:e.target.value});
+        }
     };
 
     handleSearch = async () => {
-        console.log(this.state);
         await this.getClassroomList(1);
     };
 
@@ -95,8 +111,49 @@ class Classroom extends React.Component{
         await this.getClassroomList(pagination.current);
     };
 
+    onSelectChange = (selectedRowKeys) => {
+        this.setState({ selectedRowKeys });
+    };
+
+    handleOpen = () => {
+        this.setState({openModalVisible:true});
+    };
+
+    handleOpenCancel = () => {
+        this.setState({openModalVisible:false});
+    };
+
+    handleOpenOk = () => {
+        let openForm = this.openForm.props.form;
+        openForm.validateFields((err,values) => {
+            if(!err){
+                values.startTime = values.startTime.format("YYYY-MM-DD HH:mm");
+                values.endTime = values.endTime.format("YYYY-MM-DD HH:mm");
+                this.submitOpen(this.state.selectedRowKeys,values.startTime,values.endTime);
+            }
+        });
+    };
+
+    submitOpen = async (classroomList,startTime,endTime) => {
+        let result = await API.addOpenSchedule(classroomList,startTime,endTime);
+        if(result.ret){
+            message.success("设置成功！");
+            this.setState({openModalVisible:false,selectedRowKeys:[]});
+        }else{
+            message.error(result.data);
+        }
+    };
+
     render(){
         const {classroomStatus,classroomList,campusList,buildingList,loading} = this.props;
+        const {selectedRowKeys} = this.state;
+        const rowSelection = {
+            selectedRowKeys,
+            onChange: this.onSelectChange,
+            getCheckboxProps: record => ({
+                disabled: record.status.code === 2, // Column configuration not to be checked
+            }),
+        };
         return(
             <div>
                 <Breadcrumb path={[{text:"教室管理",link:""}]}/>
@@ -112,7 +169,7 @@ class Classroom extends React.Component{
                     }
                 </Select>
 
-                    教学楼：<Select style={{width:150,marginRight:50}} placeholder="选择教学楼"
+                    教学楼：<Select showSearch style={{width:150,marginRight:50}} placeholder="选择教学楼"
                                     optionFilterProp="children" defaultValue={""}
                                     onChange={this.handleSearchBuildingChange}>
                     <Option key={-1} value={""}>全部</Option>
@@ -138,11 +195,25 @@ class Classroom extends React.Component{
                    onChange={this.handleSearchNumberChange}
                    onBlur={this.handleSearch} />
                 </div>
-                <Table style={{margin:20,marginTop:0}} columns={this.columns} rowKey={"id"}
+                <Table style={{margin:20,marginTop:0,marginBottom:0}} columns={this.columns} rowKey={"number"}
+                       rowSelection = {rowSelection}
                        dataSource={classroomList !== undefined ? classroomList : []}
                        pagination={this.state.pagination}
                        loading={!!loading}
                        onChange={this.handleTableChange}/>
+                <Button style={{marginLeft:20}} disabled={this.state.selectedRowKeys.length === 0}
+                        type={"primary"}
+                        onClick={this.handleOpen}>
+                    开放自习
+                </Button>
+
+                <Modal title="选择开放时间段" okText={"确认开放"} cancelText="取消" destroyOnClose={true}
+                       visible={this.state.openModalVisible}
+                       onCancel={this.handleOpenCancel}
+                       onOk={this.handleOpenOk}
+                >
+                    <OpenForm wrappedComponentRef={(node) => this.openForm = node}/>
+                </Modal>
             </div>
         );
     }

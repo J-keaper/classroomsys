@@ -159,4 +159,68 @@
           id = #{id}
     </update>
 
+
+    <select id="getOverdueApply" resultMap="applyMap">
+        SELECT
+          id,
+          applicant_id,
+          apply_purpose,
+          apply_reason,
+          capacity,
+          start_time,
+          end_time,
+          create_time,
+          status,
+          auditor_id,
+          audit_time,
+          audit_result,
+          classroom
+        FROM
+          apply
+        WHERE
+        <![CDATA[
+            start_time < NOW()
+        ]]>
+        AND
+          status = 1
+    </select>
+
+
+    <update id="updateStatus">
+      UPDATE
+        apply
+      SET
+        status = #{status}
+      WHERE
+        id = #{id}
+    </update>
+
+
+    <select id="getApplyByClassroom" resultMap="applyMap">
+        SELECT
+          id,
+          applicant_id,
+          apply_purpose,
+          apply_reason,
+          capacity,
+          start_time,
+          end_time,
+          create_time,
+          status,
+          auditor_id,
+          audit_time,
+          audit_result,
+          classroom
+        FROM
+          apply
+        WHERE
+          classroom = #{classroom}
+        AND
+        <![CDATA[
+            start_time < NOW()
+        AND
+            end_time > NOW()
+        ]]>
+    </select>
+
 </mapper>

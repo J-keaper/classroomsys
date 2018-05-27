@@ -10,8 +10,8 @@ import com.keaper.classroom.enums.UserType;
 import com.keaper.classroom.modal.User;
 import com.keaper.classroom.modal.filter.UserFilter;
 import com.keaper.classroom.persistence.dao.UserDao;
-import com.keaper.classroom.utils.EncryptUtil;
-import com.keaper.classroom.utils.TokenUtil;
+import com.keaper.classroom.common.utils.EncryptUtil;
+import com.keaper.classroom.common.utils.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

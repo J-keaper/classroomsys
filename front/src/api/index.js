@@ -76,6 +76,23 @@ class API {
         return await API.post("/api/classroom/import",params);
     }
 
+    static async getCanApplyClassroom(applyId){
+        return await API.get("/api/apply/audit/advice",{id:applyId})
+    }
+
+
+    static async addOpenSchedule(classroomList,startTime,endTime){
+        return await this.addClassroomSchedule(classroomList,startTime,endTime,2);
+    }
+
+    static async addClassroomSchedule(classroomList,startTime,endTime,status) {
+        let params = new URLSearchParams();
+        params.append("cl", JSON.stringify(classroomList));
+        params.append("st", startTime);
+        params.append("et", endTime);
+        params.append("s", status);
+        return await API.post("/api/classroom/schedule/add",params);
+    }
 
     static async getApplyList(searchApplicant,searchStatus,pageCount,pageSize){
         return await API.get("/api/apply/list",
@@ -117,7 +134,7 @@ class API {
         if(params !== undefined && params !== null){
             Object.keys(params).map((value,index) => {
                 completeUrl += index === 0 ? "?" : "&";
-                completeUrl += value + "=" + params[value];
+                completeUrl += value + "=" + encodeURIComponent(params[value]);
             });
         }
         let result = await axios.get(completeUrl);

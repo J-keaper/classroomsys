@@ -5,6 +5,7 @@ import com.keaper.classroom.modal.Classroom;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -44,5 +45,9 @@ public interface ClassroomDao {
      * @return
      */
     int updateStatus(@Param("classroom")String classroom,@Param("status")int status);
+
+    List<String> getCanApplyClassroom(@Param("startTime")Date startTime,
+                                      @Param("endTime")Date endTime,
+                                      @Param("capacity") int capacity);
 
 }

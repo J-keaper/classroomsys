@@ -24,7 +24,7 @@ class DetailModal extends React.Component{
                     <Col span={8} style={{textAlign:"right"}}>申请时间：</Col>
                     <Col span={16}>
                         {moment(applyInfo.startTime).format("YYYY-MM-DD HH:mm") +
-                        " 至 " + moment(applyInfo.endTime).format("YYYY-MM-DD HH:mm")}
+                    " 至 " + moment(applyInfo.endTime).format("YYYY-MM-DD HH:mm")}
                     </Col>
                 </Row>
                 <Row style={{margin:5}}>

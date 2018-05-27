@@ -11,18 +11,21 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class EmailService {
 
-    private static Logger logger = LoggerFactory.getLogger(EmailService.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
-    private static String CAPTCHA_MAIL_SUBJECT = "验证码";
 
-    private static String RESET_PASSWORD_SUBJECT = "密码重置";
+    private static final String RESET_PASSWORD_SUBJECT = "教室管理系统-密码重置";
+
+    private static final String MAIL_SENDER = "教室管理系统-管理员";
 
 
     @Resource
@@ -37,6 +40,14 @@ public class EmailService {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage,true,"UTF-8");
 
             messageHelper.setFrom(mailSender.getUsername());
+            String nick="";
+            try{
+                nick=javax.mail.internet.MimeUtility.encodeText(MAIL_SENDER);
+            }catch(UnsupportedEncodingException e){
+                e.printStackTrace();
+            }
+            messageHelper.setFrom(new InternetAddress(nick+" <"+mailSender.getUsername()+">"));
+
             messageHelper.setTo(toEmails);
             messageHelper.setSubject(subject);
 
@@ -62,12 +73,20 @@ public class EmailService {
         sendThymeleafMail(new String[]{toEmail},subject,model,templateLocation);
     }
 
-    public void sendResetPasswordEmail(String toMails, final String resetPasswordUrl) throws MessagingException {
-        sendThymeleafMail(toMails, RESET_PASSWORD_SUBJECT,
-                    new HashMap<String, Object>(){{
-                    put("url",resetPasswordUrl);
-                }},"reset-pwd-email"
-        );
+    public void sendResetPasswordEmail(final String toMails, final String resetPasswordUrl) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    sendThymeleafMail(toMails, RESET_PASSWORD_SUBJECT,
+                            new HashMap<String, Object>(){{
+                                put("url",resetPasswordUrl);
+                            }},"reset-pwd-email"
+                    );
+                } catch (MessagingException e) {
+                    logger.error("发送邮件出错",e);
+                }
+            }
+        }).start();
     }
 
 }

@@ -8,7 +8,6 @@ import AdminApply from "./Apply";
 import AdminClassroom from "./Classroom";
 import AdminUser from "./User";
 import AdminClassroomImport from "./Classroom/ClassroomImport";
-import AdminHome from "./Home";
 import AdminUserImport from "./User/UserImport";
 import AdminHelp from "./Help";
 import AdminApplyAudit from "./Audit";
@@ -36,7 +35,6 @@ class App extends React.Component {
                 <Layout>
                     <HeadBar collapsed={this.state.collapsed} toggle={this.toggle}/>
                     <Content>
-                        <Route path="/admin" exact component={AdminHome}/>
                         <Route path="/admin/apply" exact component={AdminApply}/>
                         <Route path="/admin/apply/audit/:id" component={AdminApplyAudit}/>
                         <Route path="/admin/user" exact component={AdminUser}/>

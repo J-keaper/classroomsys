@@ -22,9 +22,9 @@ class FrontApp extends React.Component{
         return (
             <Layout style={{height:"100%"}}>
                 <HeadBar/>
-                <Content style={{paddingTop:10}}>
+                <Content style={{marginTop:64}}>
                     <Switch>
-                        <Route path="/home"  component={Home}/>
+                        <Route path="/" exact  component={Home}/>
                         <Route path="/apply" render={ () => (isLogined() ?
                             <Apply/> : <Redirect to="/login"/>)}/>
                         <Route path="/classroom"  component={Classroom}/>

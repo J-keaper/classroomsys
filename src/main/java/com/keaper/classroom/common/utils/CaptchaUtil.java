@@ -1,4 +1,4 @@
-package com.keaper.classroom.utils;
+package com.keaper.classroom.common.utils;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;

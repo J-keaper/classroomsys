@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.keaper.classroom.persistence.dao.ScheduleDao">
+    <resultMap id="scheduleMap" type="com.keaper.classroom.modal.Schedule">
+        <id column="id" property="id"/>
+        <result column="classroom" property="classroom"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="status" property="status"
+                typeHandler="com.keaper.classroom.persistence.handler.ScheduleStatusHandler"/>
+        <result column="classroom_status" property="classroomStatus"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <insert id="addSchedule" >
+        INSERT INTO
+          schedule
+        (
+          classroom,
+          start_time,
+          end_time,
+          status,
+          classroom_status,
+          create_time
+        ) VALUES (
+          #{classroom},
+          #{startTime},
+          #{endTime},
+          #{status},
+          #{classroomStatus},
+          NOW()
+        )
+    </insert>
+
+    <insert id="batchAddSchedule">
+        INSERT INTO
+          schedule
+        (
+          classroom,
+          start_time,
+          end_time,
+          status,
+          classroom_status,
+          create_time
+        ) VALUES
+         <foreach collection="scheduleList" item="schedule" separator=",">
+          (
+          #{schedule.classroom},
+          #{schedule.startTime},
+          #{schedule.endTime},
+          #{schedule.status,typeHandler=com.keaper.classroom.persistence.handler.ScheduleStatusHandler},
+          #{schedule.classroomStatus},
+          NOW()
+          )
+         </foreach>
+
+    </insert>
+
+
+    <select id="getNeedExecuteList" resultMap="scheduleMap">
+        SELECT
+          id,
+          classroom,
+          start_time,
+          end_time,
+          status,
+          classroom_status,
+          create_time
+        FROM
+          schedule
+        WHERE
+        <![CDATA[
+          NOW() >= start_time
+        AND
+          NOW() < end_time
+        ]]>
+        AND
+          status = 1
+    </select>
+
+
+    <select id="getNeedOverdueList" resultMap="scheduleMap">
+        SELECT
+          id,
+          classroom,
+          start_time,
+          end_time,
+          status,
+          classroom_status,
+          create_time
+        FROM
+          schedule
+        WHERE
+        <![CDATA[
+          NOW() >= end_time
+        ]]>
+        AND
+        status = 2
+    </select>
+
+    <update id="updateStatus">
+        UPDATE
+          schedule
+        SET
+          status = #{status}
+        WHERE
+          id = #{id}
+    </update>
+
+</mapper>

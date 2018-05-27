@@ -1,9 +1,8 @@
 import React from 'react';
-import {Upload, Icon, Table, Button, Row, Col} from "antd";
+import {Upload, Icon, Table, Button, Row, Col, message, Spin} from "antd";
 import Breadcrumb from "../../../components/Breadcrumb/index";
 import XLSX from 'xlsx';
 import API from "../../../api";
-import {message} from "antd/lib/index";
 
 const Dragger = Upload.Dragger;
 
@@ -31,6 +30,7 @@ class ClassroomImport extends React.Component{
 
         this.state = {
             data: [],
+            loading:false
         };
     }
 
@@ -38,7 +38,9 @@ class ClassroomImport extends React.Component{
         if(this.state.data === []){
             message.error("数据为空！");
         }
+        this.setState({loading:true});
         let result = await API.importClassroomList(this.state.data);
+        this.setState({loading:false});
         if(result.ret){
             this.setState({data:[]});
             message.success("导入成功！");
@@ -94,11 +96,13 @@ class ClassroomImport extends React.Component{
                             <h4 style={{textAlign:"right"}}><a href="/file/教室信息模板文件.xlsx">点击下载模板文件</a></h4>
                         </Col>
                     </Row>
-                    <Table style={{marginTop:10,marginBottom:10}} columns={this.columns}
-                           rowKey="no" dataSource={this.state.data}/>
-                    <Button style={{marginLeft:"45%"}} type={"primary"}
-                            onClick={this.handleImport}
-                    >导入</Button>
+                    <Spin spinning={this.state.loading} tip={"导入中..."}>
+                        <Table style={{marginTop:10,marginBottom:10}} columns={this.columns}
+                               rowKey="no" dataSource={this.state.data}/>
+                        <Button style={{marginLeft:"45%"}} type={"primary"}
+                                onClick={this.handleImport}
+                        >导入</Button>
+                    </Spin>
                 </div>
             </div>
         );

@@ -7,6 +7,7 @@ public enum ApplyStatus {
     PENDING(1,"待审核"),
     PASSED(2,"审核通过"),
     DENIED(3,"审核未通过"),
+    OVERDUE(4,"过期未审核")
     ;
 
     private int code;

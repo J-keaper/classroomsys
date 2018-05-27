@@ -10,6 +10,7 @@
         <result column="campus" property="campus"/>
         <result column="seating" property="seating"/>
         <result column="status" property="status"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <select id="selectClassroomByNumber" resultMap="classroomMap">
@@ -19,7 +20,8 @@
           building,
           campus,
           seating,
-          status
+          status,
+          update_time
         FROM
           classroom
         WHERE
@@ -47,7 +49,8 @@
           building,
           campus,
           seating,
-          status
+          status,
+          update_time
         FROM
           classroom
         <where>
@@ -98,7 +101,8 @@
           building,
           number,
           seating,
-          status
+          status,
+          update_time
         )VALUES
         <foreach collection="classroomList" item="classroom" separator=",">
           (
@@ -106,7 +110,8 @@
             #{classroom.building},
             #{classroom.number},
             #{classroom.seating},
-            #{classroom.status}
+            #{classroom.status},
+            NOW()
           )
         </foreach>
     </insert>
@@ -115,9 +120,37 @@
         UPDATE
           classroom
         SET
-          status = #{status}
+          status = #{status},
+          update_time = NOW()
         WHERE
           number = #{classroom}
     </update>
+
+
+    <select id="getCanApplyClassroom" resultType="java.lang.String">
+        SELECT
+          number
+        FROM
+          classroom
+        WHERE
+        <![CDATA[
+          seating >= #{capacity}
+        ]]>
+        AND
+          number
+        NOT IN
+        (
+          SELECT
+            classroom
+          FROM
+            schedule
+          WHERE
+        <![CDATA[
+            (start_time >= #{startTime} AND start_time < #{endTime})
+            OR
+            (end_time >= #{startTime} AND end_time < #{endTime})
+        ]]>
+        )
+    </select>
 
 </mapper>

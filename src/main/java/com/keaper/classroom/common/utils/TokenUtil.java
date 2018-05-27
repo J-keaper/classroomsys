@@ -1,4 +1,4 @@
-package com.keaper.classroom.utils;
+package com.keaper.classroom.common.utils;
 
 import com.google.common.collect.Maps;
 import com.keaper.classroom.modal.User;

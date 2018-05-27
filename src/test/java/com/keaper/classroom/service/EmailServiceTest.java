@@ -17,4 +17,5 @@ public class EmailServiceTest extends SpringBaseTest{
     public void sendResetPasswordEmail() throws MessagingException {
         emailService.sendResetPasswordEmail("1042137827@qq.com","www.baidu.com");
     }
+
 }

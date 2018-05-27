@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, Form, Icon, Input, message, Spin} from 'antd';
+import {Button, Col, Form, Icon, Input, message, Row, Spin} from 'antd';
 import './index.less';
 import API from "../../../api";
 
@@ -34,7 +34,7 @@ class Login extends React.Component {
             appkey: "FFFF0N00000000005B69",
             scene: this.state.scene,
             token: ["FFFF0N00000000005B69", (new Date()).getTime(), Math.random()].join(':'),
-            customWidth: 240,
+            customWidth: 300,
             callback: this.validateCallBack,
         };
         let nc = new noCaptcha(NC_Opt);
@@ -87,19 +87,22 @@ class Login extends React.Component {
             <div className="login">
                 <Spin spinning={this.state.loading} tip={"登录中..."}>
                     <div className="login-form">
-                        <Form style={{maxWidth: '300px'}} onSubmit={this.handleSubmit}>
+                        <div>
+                            <img style={{height:50}} src="/logo_black.svg"/>
+                        </div>
+                        <Form  onSubmit={this.handleSubmit}>
                             <FormItem>
                                 {getFieldDecorator('account', {
                                     rules: [{required: true, message: '请输入用户名!'}],
                                 })(
-                                    <Input prefix={<Icon type="user" style={{fontSize: 13}}/>} placeholder="用户名"/>
+                                    <Input prefix={<Icon type="user" />} placeholder="用户名"/>
                                 )}
                             </FormItem>
                             <FormItem>
                                 {getFieldDecorator('password', {
                                     rules: [{required: true, message: '请输入密码!'}],
                                 })(
-                                    <Input prefix={<Icon type="lock" style={{fontSize: 13}}/>} type="password"
+                                    <Input prefix={<Icon type="lock" />} type="password"
                                            placeholder="密码"/>
                                 )}
                             </FormItem>

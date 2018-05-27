@@ -1,18 +1,16 @@
 package com.keaper.classroom.web.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONReader;
 import com.keaper.classroom.annotation.TokenValidate;
 import com.keaper.classroom.common.JsonResult;
 import com.keaper.classroom.enums.UserType;
 import com.keaper.classroom.modal.ApplyInfo;
 import com.keaper.classroom.modal.User;
 import com.keaper.classroom.modal.filter.UserFilter;
-import com.keaper.classroom.persistence.dao.UserDao;
 import com.keaper.classroom.service.ApplyService;
 import com.keaper.classroom.service.EmailService;
 import com.keaper.classroom.service.UserService;
-import com.keaper.classroom.utils.TokenUtil;
+import com.keaper.classroom.common.utils.TokenUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -154,20 +152,14 @@ public class UserController {
         User user = userService.selectUserByEmail(email);
         String resetPasswordUrl = userService.buildResetPasswordUrl(request,user);
         if(resetPasswordUrl == null){
+            logger.info("找回密码邮箱:{}不存在绑定用户！",email);
             return JsonResult.getErrorResult(
                     JsonResult.Result.ERROR,"邮箱不存在！");
         }
         logger.info("email:{},重置密码链接：{}",email,resetPasswordUrl);
-        try{
-            emailService.sendResetPasswordEmail(email,resetPasswordUrl);
-            userService.setWaitReset(user.getAccount());
-            return JsonResult.getCorrectResult("发送成功！");
-        }catch (MessagingException e){
-            logger.info("发送邮件失败！",e);
-            return JsonResult.getErrorResult(
-                    JsonResult.Result.ERROR,"发送失败"
-            );
-        }
+        emailService.sendResetPasswordEmail(email,resetPasswordUrl);
+        userService.setWaitReset(user.getAccount());
+        return JsonResult.getCorrectResult("发送成功！");
     }
 
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import {Button, Card, Col, Form, Input, Row} from "antd";
-import {message} from "antd/lib/index";
+import {Button, Card, Col, Form, Input, Row,message} from "antd";
 import API from "../../../api";
 import {withRouter} from "react-router-dom";
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="updateClassroomJobTrigger"/>
+                <ref bean="overdueApplyTaskJobTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="updateClassroomJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="updateClassroomStatusTask"/>
+        <property name="targetMethod" value="doTask"/>
+    </bean>
+
+    <bean id="updateClassroomJobTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="updateClassroomJobDetail" />
+        <property name="cronExpression" value="0 */1 * * * ?" />
+    </bean>
+
+    <bean id="overdueApplyTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="overdueApplyTask"/>
+        <property name="targetMethod" value="doTask"/>
+    </bean>
+
+    <bean id="overdueApplyTaskJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="overdueApplyTaskJobDetail"/>
+        <property name="cronExpression" value="0 */1 * * * ?"/>
+    </bean>
+
+</beans>

@@ -5,11 +5,13 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.keaper.classroom.enums.ApplyStatus;
 import com.keaper.classroom.enums.ClassroomStatus;
+import com.keaper.classroom.enums.ScheduleStatus;
 import com.keaper.classroom.modal.Apply;
 import com.keaper.classroom.modal.ApplyInfo;
 import com.keaper.classroom.modal.filter.ApplyFilter;
 import com.keaper.classroom.persistence.dao.ApplyDao;
 import com.keaper.classroom.persistence.dao.ClassroomDao;
+import com.keaper.classroom.persistence.dao.ScheduleDao;
 import com.keaper.classroom.persistence.dao.UserDao;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class ApplyService {
@@ -32,6 +34,9 @@ public class ApplyService {
 
     @Resource
     private ClassroomDao classroomDao;
+
+    @Resource
+    private ScheduleDao scheduleDao;
 
     public List<ApplyInfo> getApplyList(int pageCount,int pageSize){
         return getApplyList(ApplyFilter.of(pageCount,pageSize));
@@ -70,13 +75,10 @@ public class ApplyService {
         return apply2ApplyInfo(applyDao.getApplyById(id));
     }
 
-    public boolean addApply(long applicantId,int applyPurpose, String applyReason,
-                            int applyCapacity,String startTime, String endTime) throws ParseException {
+    public boolean addApply(long applicantId, int applyPurpose, String applyReason,
+                            int applyCapacity, Date startTime, Date endTime) throws ParseException {
         return applyDao.addApply(applicantId,applyPurpose,applyReason, applyCapacity,
-                DateUtils.parseDate(startTime,"yyyy-MM-dd HH:mm"),
-                DateUtils.parseDate(endTime,"yyyy-MM-dd HH:mm"),
-                ApplyStatus.PENDING.getCode()) > 0;
-
+                startTime,endTime, ApplyStatus.PENDING.getCode()) > 0;
     }
 
 
@@ -86,7 +88,9 @@ public class ApplyService {
         if(status == ApplyStatus.DENIED){
             return applyDao.updateAuditInfo(id,auditorId,status.getCode(),opinion,classroom) > 0;
         }
-        return classroomDao.updateStatus(classroom,ClassroomStatus.ACTIVITY.getCode()) > 0 &&
+        Apply apply = applyDao.getApplyById(id);
+        return  scheduleDao.addSchedule(classroom,apply.getStartTime(),
+                apply.getEndTime(),ScheduleStatus.PENDING.getCode(), ClassroomStatus.ACTIVITY)> 0 &&
                 applyDao.updateAuditInfo(id,auditorId,status.getCode(),opinion,classroom) > 0;
     }
 
@@ -101,6 +105,11 @@ public class ApplyService {
             applyInfo.setAuditClassroom(classroomDao.selectClassroomByNumber(apply.getClassroom()));
         }
         return applyInfo;
+    }
+
+    public List<String> getCanApplyClassroomList(long applyId){
+        Apply apply = applyDao.getApplyById(applyId);
+        return classroomDao.getCanApplyClassroom(apply.getStartTime(),apply.getEndTime(),apply.getCapacity());
     }
 
 }

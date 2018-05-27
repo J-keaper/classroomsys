@@ -30,13 +30,17 @@ class HeadBar extends React.Component{
         const {userInfo} = this.props;
         return (
             <Header className="header-container">
-                <div className="logo"></div>
+                <div className="logo">
+                    <Link to={"/"}>
+                        <img  src="/logo_black.svg"/>
+                    </Link>
+                </div>
                 <Menu mode="horizontal" className="header-menu">
                     <Menu.Item key="1">
                         <Link to="/apply">申请教室</Link>
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <Link to="/classroom">教室查询</Link>
+                        <Link to="/classroom">自习教室查询</Link>
                     </Menu.Item>
                     {!!localStorage.getItem('token') ? (
                         <SubMenu style={{float:"right"}} title={

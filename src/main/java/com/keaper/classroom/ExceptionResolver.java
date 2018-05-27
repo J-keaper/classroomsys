@@ -18,7 +18,9 @@ public class ExceptionResolver implements HandlerExceptionResolver {
 
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         ModelAndView mv = new ModelAndView();
-
+        if(!(handler instanceof HandlerMethod)){
+            return mv;
+        }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         logger.error("{}:{} Exception",method.getDeclaringClass().getName(),method.getName(),ex);

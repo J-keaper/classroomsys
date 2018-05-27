@@ -28,12 +28,6 @@ class Classroom extends React.Component{
             title:"容量",
             dataIndex:"seating",
             key:"seating"
-        },{
-            title:"状态",
-            key:"status",
-            render:(text,record) => (
-                record.status.desc
-            )
         }];
 
         this.defaultPageSize = 10;
@@ -42,7 +36,6 @@ class Classroom extends React.Component{
             pagination: {defaultPageSize:this.defaultPageSize},
             searchCampus:"",
             searchBuilding:"",
-            searchStatus:-1,
             searchNumber:""
         }
     }
@@ -54,7 +47,7 @@ class Classroom extends React.Component{
 
     getClassroomList = async (pageCount = 1,pageSize = this.defaultPageSize) => {
         await this.props.getClassroomList(this.state.searchCampus,this.state.searchBuilding,
-            this.state.searchStatus,this.state.searchNumber, pageCount,pageSize);
+            2,this.state.searchNumber, pageCount,pageSize);
         const pagination = { ...this.state.pagination };
         pagination.total = this.props.classroomCount;
         pagination.current = pageCount;
@@ -69,16 +62,14 @@ class Classroom extends React.Component{
         this.setState({searchBuilding:v},this.handleSearch);
     };
 
-    handleSearchStatusChange = (v) => {
-        this.setState({searchStatus:v},this.handleSearch);
-    };
 
     handleSearchNumberChange = (e) => {
-        this.setState({searchNumber:e.target.value});
+        if(e.target.value !== this.state.searchNumber){
+            this.setState({searchNumber:e.target.value});
+        }
     };
 
     handleSearch = async () => {
-        console.log(this.state);
         await this.getClassroomList(1);
     };
 
@@ -87,7 +78,7 @@ class Classroom extends React.Component{
     };
 
     render(){
-        const {classroomStatus,classroomList,campusList,buildingList,loading} = this.props;
+        const {classroomList,campusList,buildingList,loading} = this.props;
         return(
             <Card style={{background:"#f0f2f5"}} bordered={false}>
                 <div style={{margin:60,marginTop:0,marginBottom:0}}>
@@ -102,7 +93,7 @@ class Classroom extends React.Component{
                     }
                 </Select>
 
-                    教学楼：<Select style={{width:150,marginRight:50}} placeholder="选择教学楼"
+                    教学楼：<Select showSearch style={{width:150,marginRight:50}} placeholder="选择教学楼"
                                 optionFilterProp="children" defaultValue={""}
                                 onChange={this.handleSearchBuildingChange}>
                     <Option key={-1} value={""}>全部</Option>
@@ -112,18 +103,6 @@ class Classroom extends React.Component{
                     ))
                     }
                 </Select>
-
-                    状态：<Select style={{width:150,marginRight:50}} placeholder="选择状态"
-                               optionFilterProp="children" defaultValue={-1}
-                               onChange={this.handleSearchStatusChange}>
-                    <Option key={-1} value={-1}>全部</Option>
-                    {classroomStatus &&
-                    Object.values(classroomStatus).map((v,i)=>(
-                        <Option key={i} value={v.code}>{v.desc}</Option>
-                    ))
-                    }
-                </Select>
-
                     <Input style={{width:200}} placeholder="教室号"
                            onChange={this.handleSearchNumberChange}
                            onBlur={this.handleSearch} />
@@ -140,7 +119,6 @@ class Classroom extends React.Component{
 const mapStateToProps = state => ({
     classroomCount:state.classroom.classroomCount,
     classroomList:state.classroom.classroomList,
-    classroomStatus:state.common.classroomStatus,
     campusList:state.common.campusList,
     buildingList:state.common.buildingList,
     loading:state.common.fetching

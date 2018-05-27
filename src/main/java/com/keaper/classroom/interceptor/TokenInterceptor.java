@@ -1,14 +1,10 @@
 package com.keaper.classroom.interceptor;
 
 import com.keaper.classroom.annotation.TokenValidate;
-import com.keaper.classroom.common.JsonResult;
-import com.keaper.classroom.utils.ConfigUtil;
-import com.keaper.classroom.utils.TokenUtil;
+import com.keaper.classroom.common.utils.TokenUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
-import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
@@ -19,13 +15,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.Date;
 
 public class TokenInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(TokenInterceptor.class);
 
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if(!(handler instanceof HandlerMethod)){
+            return true;
+        }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         /**

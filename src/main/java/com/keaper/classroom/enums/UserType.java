@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum UserType {
     ADMIN(1,"管理员"),
-    AUDITOR(2,"审核人员"),
     STUDENT(11,"学生"),
     TEACHER(12,"教师");
 

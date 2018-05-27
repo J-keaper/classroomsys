@@ -2,6 +2,8 @@ package com.keaper.classroom.modal;
 
 import com.keaper.classroom.enums.ClassroomStatus;
 
+import java.util.Date;
+
 public class Classroom {
 
     private long id;
@@ -14,7 +16,22 @@ public class Classroom {
 
     private int seating;
 
+    private Date updateTime;
+
     private ClassroomStatus status;
+
+    public Classroom() {
+    }
+
+    public Classroom(Classroom classroom) {
+        this.id = classroom.id;
+        this.number = classroom.number;
+        this.building = classroom.building;
+        this.campus = classroom.campus;
+        this.seating = classroom.seating;
+        this.updateTime = classroom.updateTime;
+        this.status = classroom.status;
+    }
 
     public long getId() {
         return id;
@@ -62,5 +79,13 @@ public class Classroom {
 
     public void setStatus(ClassroomStatus status) {
         this.status = status;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

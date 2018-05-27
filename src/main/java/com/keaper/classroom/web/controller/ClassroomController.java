@@ -7,6 +7,7 @@ import com.keaper.classroom.enums.ClassroomStatus;
 import com.keaper.classroom.modal.Classroom;
 import com.keaper.classroom.modal.filter.ClassroomFilter;
 import com.keaper.classroom.service.ClassroomService;
+import com.mysql.cj.xdevapi.JsonArray;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.List;
 
 @Controller
@@ -57,5 +59,16 @@ public class ClassroomController {
         return JsonResult.getCorrectResult("导入成功！");
     }
 
-
+    @RequestMapping(method = RequestMethod.POST,path = "schedule/add")
+    @ResponseBody
+    public JsonResult addSchedule(@RequestParam(value = "cl")String classroomList,
+                                  @RequestParam(value = "st")String startTime,
+                                  @RequestParam(value = "et")String endTime,
+                                  @RequestParam(value = "s")String status) throws ParseException {
+        boolean result = classroomService.addSchedule(classroomList,startTime,endTime,status);
+        if(!result){
+            return JsonResult.getErrorResult(JsonResult.Result.ERROR,"添加失败！");
+        }
+        return JsonResult.getCorrectResult("添加成功！");
+    }
 }

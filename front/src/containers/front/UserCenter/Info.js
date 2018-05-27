@@ -1,10 +1,9 @@
 import React from 'react';
-import {Button, Card, Col, Form, Input, Row} from "antd";
+import {Button, Card, Col, Form, Input, Row,message} from "antd";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {getCommonConstant, getUserInfo} from "../../../redux/action";
 import API from "../../../api";
-import {message} from "antd/lib/index";
 
 const formItemLayout = {
     labelCol:{

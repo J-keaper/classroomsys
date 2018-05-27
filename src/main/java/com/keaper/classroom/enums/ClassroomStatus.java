@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ClassroomStatus {
     CLOSE(1,"关闭"),
-    FREE(2,"空闲"),
+    OPEN_FREE(2,"开放空闲"),
     TEACHING(3,"正常教学"),
     ACTIVITY(4,"活动占用");
 

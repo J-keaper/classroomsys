@@ -105,12 +105,14 @@ class UserApply extends React.Component{
                                     {detailApply && detailApply !== {} ? detailApply.status.desc : ""}
                                 </Col>
                             </Row>
-                            <Row style={{margin: 5}}>
-                                <Col span={8} style={{textAlign: "right"}}>审核教室：</Col>
-                                <Col span={16}>
-                                    {detailApply && detailApply !== {} ? detailApply.classroom : ""}
-                                </Col>
-                            </Row>
+                            {detailApply.status.code === 2 &&
+                                <Row style={{margin: 5}}>
+                                    <Col span={8} style={{textAlign: "right"}}>审核教室：</Col>
+                                    <Col span={16}>
+                                        {detailApply && detailApply !== {} ? detailApply.classroom : ""}
+                                    </Col>
+                                </Row>
+                            }
                             <Row style={{margin: 5}}>
                                 <Col span={8} style={{textAlign: "right"}}>审核意见：</Col>
                                 <Col span={16}>

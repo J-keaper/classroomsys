@@ -7,17 +7,19 @@ class Home extends React.Component{
 
     constructor(){
         super();
-
     }
 
     render(){
         return (
             <div>
                 <Carousel autoplay>
-                    <div><h3>1</h3></div>
-                    <div><h3>2</h3></div>
-                    <div><h3>3</h3></div>
-                    <div><h3>4</h3></div>
+                    <div>
+                        <img src={"/banner1.png"}/>
+                    </div>
+                    <div>
+                        <img src={"/banner2.png"}/></div>
+                    <div>
+                        <img src={"/banner3.png"}/></div>
                 </Carousel>
                 <Row>
                     <Col>
