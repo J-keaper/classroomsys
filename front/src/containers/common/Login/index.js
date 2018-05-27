@@ -3,6 +3,7 @@ import {Link, withRouter} from 'react-router-dom';
 import {Button, Col, Form, Icon, Input, message, Row, Spin} from 'antd';
 import './index.less';
 import API from "../../../api";
+import config from '../../../conf/captcha';
 
 const FormItem = Form.Item;
 
@@ -15,7 +16,7 @@ class Login extends React.Component {
             csessionid: "",
             sig: "",
             token: "",
-            scene: "nc_login",
+            scene: config.scene,
             loading: false
         }
     }
@@ -31,9 +32,9 @@ class Login extends React.Component {
     initValidation = () => {
         let NC_Opt = {
             renderTo: "#captcha",
-            appkey: "FFFF0N00000000005B69",
+            appkey: config.appkey,
             scene: this.state.scene,
-            token: ["FFFF0N00000000005B69", (new Date()).getTime(), Math.random()].join(':'),
+            token: [config.appkey, (new Date()).getTime(), Math.random()].join(':'),
             customWidth: 300,
             callback: this.validateCallBack,
         };

@@ -8,7 +8,7 @@ class SideBar extends React.Component {
     render(){
         return (
             <Sider collapsed={this.props.collapsed}>
-                <div style={{ float: "left", height:40,marginLeft: 20, marginRight: 20,marginTop:15}}>
+                <div style={{ float: "left", height:64,padding:"10px 20px"}}>
                     {this.props.collapsed ?
                     <img style={{height:36}} src="/logo.svg"/> :
                     <img style={{height:36}} src="/logo_white.svg"/>
