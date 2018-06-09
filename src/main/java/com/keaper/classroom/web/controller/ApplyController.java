@@ -99,7 +99,9 @@ public class ApplyController {
     }
 
 
-
+    /**
+     * 审核教室
+     */
     @ResponseBody
     @RequestMapping("audit")
     public JsonResult audit(HttpServletRequest request,

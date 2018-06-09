@@ -57,6 +57,10 @@ class UserInfo extends React.Component{
                         {...formItemLayout}
                         label="手机">
                         {getFieldDecorator('phone', {
+                            rules:[{
+                                pattern:"^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
+                                message:"手机号码格式不符合要求！"
+                            }],
                             initialValue:user ? user.phone : ""
                         })(
                             <Input />
@@ -66,6 +70,10 @@ class UserInfo extends React.Component{
                         {...formItemLayout}
                         label="邮箱">
                         {getFieldDecorator('email', {
+                            rules:[{
+                                pattern:"^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$",
+                                message:"邮箱格式不符合要求！"
+                            }],
                             initialValue:user ? user.email : ""
                         })(
                             <Input />
